@@ -17,10 +17,13 @@ console.log("JWT_SECRET:", process.env.JWT_SECRET);
 console.log("PORT:", process.env.PORT);
 // =============================================
 
-// ===== KẾT NỐI MONGODB LOCAL =====
+// ===== KẾT NỐI MONGODB =====
+const MONGODB_URI =
+  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/chothuenha";
+console.log("MONGODB_URI:", MONGODB_URI.substring(0, 50) + "..."); // Log để debug
 mongoose
-  .connect("mongodb://127.0.0.1:27017/chothuenha")
-  .then(() => console.log("✅ Đã kết nối Database (MongoDB local)"))
+  .connect(MONGODB_URI)
+  .then(() => console.log("✅ Đã kết nối Database"))
   .catch((err) => console.error("❌ Lỗi kết nối DB:", err));
 
 // ===== ROUTES =====
