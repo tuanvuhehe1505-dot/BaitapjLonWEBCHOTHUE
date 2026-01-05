@@ -1,0 +1,79 @@
+:root {
+  --primary-dark: #052547;
+  --accent-burgundy: #7f1734;
+}
+
+/* header + menu */
+.main-header {
+  background: var(--primary-dark) !important;
+}
+.main-header .logo h1 a {
+  color: var(--accent-burgundy) !important;
+}
+.main-header .main-menu a {
+  color: #fff !important;
+}
+.main-header .main-menu a:hover {
+  color: var(--accent-burgundy) !important;
+}
+.contact-info,
+.phone {
+  color: var(--accent-burgundy) !important;
+}
+.post-btn {
+  background: var(--accent-burgundy) !important;
+}
+.post-btn:hover {
+  background: #5d0f23 !important;
+}
+
+/* search */
+.search-type {
+  background: var(--accent-burgundy) !important;
+}
+
+/* listing accents */
+.listing-title {
+  color: var(--accent-burgundy) !important;
+}
+.price-area {
+  color: var(--accent-burgundy) !important;
+}
+.vip-label {
+  background: var(--accent-burgundy) !important;
+}
+.user-dropdown a:hover {
+  background: var(--accent-burgundy) !important;
+}
+
+/* dropzone and previews */
+.dropzone {
+  border: 2px dashed #ddd;
+  padding: 18px;
+  border-radius: 12px;
+  text-align: center;
+  color: #666;
+}
+.dropzone.dragover {
+  border-color: var(--accent-burgundy);
+  background: #fff6f6;
+}
+.image-previews {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.image-previews img {
+  width: 96px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+/* modal header accent */
+#postModal .post-header {
+  background: var(--accent-burgundy);
+  color: white;
+}

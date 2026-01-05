@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChoThuêNhà.com - Nhà đất cho thuê chính chủ</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="main-header">
+      <div class="container header-top">
+        <!-- Logo -->
+        <div class="logo" onclick="location.reload()" style="cursor: pointer">
+          <h1>
+            <a
+              href="javascript:void(0)"
+              style="text-decoration: none; color: inherit"
+              >CHOTHUE<span>.COM</span></a
+            >
+          </h1>
+        </div>
+
+        <!-- Menu chính -->
+        <nav class="main-menu">
+          <div class="menu-item">
+            <a href="#">Nhà Đất Cho Thuê <i class="fas fa-caret-down"></i></a>
+            <div class="dropdown">
+              <a href="#">Nhà nguyên căn</a>
+              <a href="#">Biệt thự</a>
+              <a href="#">Căn hộ dịch vụ</a>
+              <a href="#">Chung cư - Căn hộ</a>
+              <a href="#">Phòng trọ</a>
+            </div>
+          </div>
+
+          <div class="menu-item">
+            <a href="#">Mặt Bằng Cho Thuê <i class="fas fa-caret-down"></i></a>
+            <div class="dropdown">
+              <a href="#">Mặt bằng kinh doanh</a>
+              <a href="#">Văn phòng</a>
+              <a href="#">Kho xưởng</a>
+            </div>
+          </div>
+
+          <a href="#">Sang Nhượng</a>
+        </nav>
+
+        <!-- Phần phải: SĐT + Đăng nhập + Đăng tin -->
+        <div class="header-right">
+          <div class="contact-info">
+            <i class="fas fa-phone"></i>
+            <span>0344886556</span>
+          </div>
+
+          <!-- Khi chưa đăng nhập -->
+          <div id="guestMenu" class="auth-links">
+            <a href="#" id="loginLink">Đăng nhập/Đăng ký</a>
+            <span style="color: #999; margin: 0 8px">|</span>
+          </div>
+
+          <!-- Khi đã đăng nhập -->
+          <div id="userMenu" style="display: none" class="user-menu">
+            <span
+              id="userName"
+              style="color: #e74c3c; font-weight: bold; cursor: pointer"
+            >
+              Phạm Anh Đạt <i class="fas fa-caret-down"></i>
+            </span>
+            <div class="user-dropdown">
+              <a href="#" onclick="logout()"
+                ><i class="fas fa-sign-out-alt"></i> Đăng xuất</a
+              >
+              <a href="#"><i class="fas fa-user"></i> Thông tin cá nhân</a>
+              <a href="#"><i class="fas fa-list"></i> Tin đăng của tôi</a>
+            </div>
+          </div>
+          <!-- ✅ THAY ĐỔI: Từ link sang onclick để mở modal -->
+          <a
+            href="javascript:void(0)"
+            onclick="openPostModal()"
+            class="post-btn"
+            >Đăng tin</a
+          >
+        </div>
+      </div>
+
+      <!-- Thanh tìm kiếm -->
+      <div class="search-bar">
+        <div class="container search-inner">
+          <button class="search-type active">Cho Thuê</button>
+          <input
+            type="text"
+            id="search"
+            placeholder="Nhập từ khóa tìm kiếm..."
+          />
+          <div class="filter-group">
+            <button class="filter-btn">
+              <i class="fas fa-map-marker-alt"></i> Lọc Khu Vực
+            </button>
+            <button class="filter-btn">
+              <i class="fas fa-home"></i> Lọc loại hình
+            </button>
+            <button class="filter-btn">
+              <i class="fas fa-tag"></i> Lọc mức giá
+            </button>
+            <button class="filter-btn">
+              <i class="fas fa-ruler-combined"></i> Lọc diện tích
+            </button>
+            <button class="reset-btn">
+              <i class="fas fa-redo"></i> Đặt lại
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- TIÊU ĐỀ + DANH SÁCH -->
+    <section class="title-section">
+      <div class="container">
+        <h1>
+          Cho thuê nhà nguyên căn, mặt bằng kinh doanh mới nhất tháng 12/2025
+        </h1>
+        <p>
+          Tin chính chủ cho thuê TIN THẬT - GIÁ THẬT - HÌNH THẬT đã được KIỂM
+          DUYỆT.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div id="roomList" class="listing-grid"></div>
+      </div>
+    </section>
+
+    <!-- MODAL ĐĂNG NHẬP + ĐĂNG KÝ SIÊU ĐẸP -->
+    <div
+      id="authModal"
+      style="
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <div
+        style="
+          background: white;
+          padding: 35px;
+          border-radius: 16px;
+          width: 90%;
+          max-width: 440px;
+          position: relative;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        "
+      >
+        <span
+          onclick="document.getElementById('authModal').style.display='none'"
+          style="
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 32px;
+            cursor: pointer;
+            color: #aaa;
+            font-weight: bold;
+          "
+          >×</span
+        >
+
+        <!-- TAB ĐĂNG NHẬP / ĐĂNG KÝ / QUÊN MK -->
+        <div style="text-align: center; margin-bottom: 25px">
+          <button
+            onclick="showLogin()"
+            id="tabLogin"
+            style="
+              padding: 12px 20px;
+              background: #e74c3c;
+              color: white;
+              border: none;
+              border-radius: 50px;
+              font-size: 14px;
+              font-weight: bold;
+            "
+          >
+            Đăng nhập
+          </button>
+          <button
+            onclick="showRegister()"
+            id="tabRegister"
+            style="
+              padding: 12px 20px;
+              background: #f0f0f0;
+              color: #333;
+              margin-left: 8px;
+              border: none;
+              border-radius: 50px;
+              font-size: 14px;
+              font-weight: bold;
+            "
+          >
+            Đăng ký
+          </button>
+          <button
+            onclick="showForgot()"
+            id="tabForgot"
+            style="
+              padding: 12px 20px;
+              background: #f0f0f0;
+              color: #333;
+              margin-left: 8px;
+              border: none;
+              border-radius: 50px;
+              font-size: 14px;
+              font-weight: bold;
+            "
+          >
+            Quên MK
+          </button>
+        </div>
+
+        <!-- FORM ĐĂNG NHẬP -->
+        <div id="loginForm">
+          <input
+            id="loginPhone"
+            placeholder="Số điện thoại"
+            style="
+              width: 100%;
+              padding: 14px;
+              margin: 10px 0;
+              border: 2px solid #ddd;
+              border-radius: 12px;
+              font-size: 16px;
+              box-sizing: border-box;
+            "
+          /><br />
+          <input
+            id="loginPass"
+            type="password"
+            placeholder="Mật khẩu"
+            style="
+              width: 100%;
+              padding: 14px;
+              margin: 10px 0;
+              border: 2px solid #ddd;
+              border-radius: 12px;
+              font-size: 16px;
+              box-sizing: border-box;
+            "
+          /><br />
+          <button
+            onclick="login()"
+            style="
+              background: #e74c3c;
+              color: white;
+              padding: 15px;
+              width: 100%;
+              border: none;
+              border-radius: 12px;
+              font-size: 17px;
+              font-weight: bold;
+              cursor: pointer;
+              margin-top: 10px;
+            "
+          >
+            ĐĂNG NHẬP
+          </button>
+        </div>
+
+        <!-- FORM ĐĂNG KÝ -->
+        <div id="registerForm" style="display: none">
+          <input
+            id="regName"
+            placeholder="Họ và tên"
+            style="
+              width: 100%;
+              padding: 14px;
+              margin: 10px 0;
+              border: 2px solid #ddd;
+              border-radius: 12px;
+              font-size: 16px;
+              box-sizing: border-box;
+            "
+          /><br />
+          <input
+            id="regPhone"
+            placeholder="Số điện thoại"
+            style="
+              width: 100%;
+              padding: 14px;
+              margin: 10px 0;
+              border: 2px solid #ddd;
+              border-radius: 12px;
+              font-size: 16px;
+              box-sizing: border-box;
+            "
+          /><br />
+          <input
+            id="regPass"
+            type="password"
+            placeholder="Mật khẩu (tối thiểu 6 ký tự)"
+            style="
+              width: 100%;
+              padding: 14px;
+              margin: 10px 0;
+              border: 2px solid #ddd;
+              border-radius: 12px;
+              font-size: 16px;
+              box-sizing: border-box;
+            "
+          /><br />
+          <input
+            id="regAdminCode"
+            placeholder="Mã admin (nếu có)"
+            style="
+              width: 100%;
+              padding: 14px;
+              margin: 10px 0;
+              border: 2px solid #ddd;
+              border-radius: 12px;
+              font-size: 16px;
+              box-sizing: border-box;
+            "
+          /><br />
+          <button
+            onclick="register()"
+            style="
+              background: #27ae60;
+              color: white;
+              padding: 15px;
+              width: 100%;
+              border: none;
+              border-radius: 12px;
+              font-size: 17px;
+              font-weight: bold;
+              cursor: pointer;
+              margin-top: 10px;
+            "
+          >
+            ĐĂNG KÝ NGAY
+          </button>
+        </div>
+
+        <!-- FORM QUÊN MẬT KHẨU -->
+        <div id="forgotForm" style="display: none">
+          <!-- BƯỚC 1: Nhập SĐT -->
+          <div id="step1Forgot" style="display: block">
+            <p style="color: #333; font-weight: bold; margin-bottom: 15px">
+              Nhập số điện thoại để lấy lại mật khẩu:
+            </p>
+            <input
+              id="forgotPhone"
+              placeholder="Số điện thoại"
+              style="
+                width: 100%;
+                padding: 14px;
+                margin: 10px 0;
+                border: 2px solid #ddd;
+                border-radius: 12px;
+                font-size: 16px;
+                box-sizing: border-box;
+              "
+            /><br />
+            <button
+              onclick="requestOTP()"
+              style="
+                background: #27ae60;
+                color: white;
+                padding: 15px;
+                width: 100%;
+                border: none;
+                border-radius: 12px;
+                font-size: 17px;
+                font-weight: bold;
+                cursor: pointer;
+                margin-top: 10px;
+              "
+            >
+              GỬI MÃ OTP
+            </button>
+          </div>
+
+          <!-- BƯỚC 2: Nhập OTP + Mật khẩu mới -->
+          <div id="step2Forgot" style="display: none">
+            <p style="color: #333; font-weight: bold; margin-bottom: 15px">
+              ✅ OTP đã được gửi
+            </p>
+            <input
+              id="otpCode"
+              placeholder="Nhập mã OTP (6 chữ số)"
+              maxlength="6"
+              style="
+                width: 100%;
+                padding: 14px;
+                margin: 10px 0;
+                border: 2px solid #ddd;
+                border-radius: 12px;
+                font-size: 16px;
+                box-sizing: border-box;
+              "
+            /><br />
+            <input
+              id="newPassword"
+              type="password"
+              placeholder="Mật khẩu mới (tối thiểu 6 ký tự)"
+              style="
+                width: 100%;
+                padding: 14px;
+                margin: 10px 0;
+                border: 2px solid #ddd;
+                border-radius: 12px;
+                font-size: 16px;
+                box-sizing: border-box;
+              "
+            /><br />
+            <input
+              id="confirmPassword"
+              type="password"
+              placeholder="Xác nhận mật khẩu mới"
+              style="
+                width: 100%;
+                padding: 14px;
+                margin: 10px 0;
+                border: 2px solid #ddd;
+                border-radius: 12px;
+                font-size: 16px;
+                box-sizing: border-box;
+              "
+            /><br />
+            <button
+              onclick="verifyOTPAndReset()"
+              style="
+                background: #e74c3c;
+                color: white;
+                padding: 15px;
+                width: 100%;
+                border: none;
+                border-radius: 12px;
+                font-size: 17px;
+                font-weight: bold;
+                cursor: pointer;
+                margin-top: 10px;
+              "
+            >
+              ĐỔI MẬT KHẨU
+            </button>
+            <button
+              onclick="showForgot()"
+              style="
+                background: #999;
+                color: white;
+                padding: 12px;
+                width: 100%;
+                border: none;
+                border-radius: 12px;
+                font-size: 15px;
+                cursor: pointer;
+                margin-top: 8px;
+              "
+            >
+              ← QUAY LẠI
+            </button>
+          </div>
+
+          <!-- Thông báo -->
+          <div
+            id="forgotMessage"
+            style="
+              display: none;
+              margin-top: 15px;
+              padding: 15px;
+              background: #fff3cd;
+              border-radius: 8px;
+              border-left: 4px solid #ffc107;
+            "
+          >
+            <p
+              id="forgotMessageText"
+              style="color: #856404; margin: 0; font-weight: bold"
+            ></p>
+          </div>
+        </div>
+
+        <p
+          style="
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+          "
+        >
+          Bằng việc đăng ký, bạn đã đồng ý với
+          <a href="#" style="color: #e74c3c">Điều khoản dịch vụ</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- SCRIPT ĐIỀU KHIỂN MODAL + ĐĂNG KÝ/ĐĂNG NHẬP -->
+    <script>
+      // ======================= MỞ MODAL ĐĂNG TIN =======================
+      function openPostModal() {
+        const user = localStorage.getItem("user");
+        const token = localStorage.getItem("token");
+
+        if (!user || !token) {
+          alert("❌ Vui lòng đăng nhập trước khi đăng tin!");
+          document.getElementById("authModal").style.display = "flex";
+          showLogin();
+          return;
+        }
+
+        const postModal = document.getElementById("postModal");
+        if (postModal) {
+          postModal.style.display = "block";
+        }
+      }
+
+      // 🔴 FIX: CHỜ DOM LOAD XONG RỒI MỚI SETUP EVENT LISTENER
+      document.addEventListener("DOMContentLoaded", function () {
+        // ✅ ĐÓNG MODAL authModal
+        const authModal = document.getElementById("authModal");
+        if (authModal) {
+          authModal.addEventListener("click", (e) => {
+            if (e.target.id === "authModal") {
+              authModal.style.display = "none";
+            }
+          });
+        }
+
+        // ✅ ĐÓNG MODAL postModal
+        const postModal = document.getElementById("postModal");
+        if (postModal) {
+          postModal.addEventListener("click", (e) => {
+            if (e.target.id === "postModal") {
+              postModal.style.display = "none";
+            }
+          });
+        }
+
+        // ✅ ĐÓNG MODAL detailModal
+        const detailModal = document.getElementById("detailModal");
+        if (detailModal) {
+          detailModal.addEventListener("click", (e) => {
+            if (e.target.id === "detailModal") {
+              detailModal.style.display = "none";
+            }
+          });
+        }
+
+        // ✅ MỞ MODAL KHI BẤM "ĐĂNG NHẬP"
+        const loginLink = document.getElementById("loginLink");
+        if (loginLink) {
+          loginLink.addEventListener("click", function (e) {
+            e.preventDefault();
+            authModal.style.display = "flex";
+            showLogin();
+          });
+        }
+
+        // ✅ SETUP DROPDOWN MENU NGƯỜI DÙNG
+        const userName = document.getElementById("userName");
+        if (userName) {
+          userName.addEventListener("click", function (e) {
+            e.stopPropagation();
+            const dropdown = document.querySelector(".user-dropdown");
+            if (dropdown) {
+              dropdown.style.display =
+                dropdown.style.display === "block" ? "none" : "block";
+            }
+          });
+        }
+
+        // ✅ ĐÓNG DROPDOWN KHI CLICK RA NGOÀI
+        document.addEventListener("click", function (e) {
+          if (!e.target.closest(".user-menu")) {
+            const dropdown = document.querySelector(".user-dropdown");
+            if (dropdown) {
+              dropdown.style.display = "none";
+            }
+          }
+        });
+      }); // ← ĐÓNG DOMContentLoaded
+
+      // ======================= HIỂN THỊ FORM ĐĂNG NHẬP =======================
+      function showLogin() {
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("registerForm").style.display = "none";
+        document.getElementById("forgotForm").style.display = "none";
+
+        document.getElementById("tabLogin").style.background = "#e74c3c";
+        document.getElementById("tabLogin").style.color = "white";
+        document.getElementById("tabRegister").style.background = "#f0f0f0";
+        document.getElementById("tabRegister").style.color = "#333";
+        document.getElementById("tabForgot").style.background = "#f0f0f0";
+        document.getElementById("tabForgot").style.color = "#333";
+      }
+
+      // ======================= HIỂN THỊ FORM ĐĂNG KÝ =======================
+      function showRegister() {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("registerForm").style.display = "block";
+        document.getElementById("forgotForm").style.display = "none";
+
+        document.getElementById("tabRegister").style.background = "#27ae60";
+        document.getElementById("tabRegister").style.color = "white";
+        document.getElementById("tabLogin").style.background = "#f0f0f0";
+        document.getElementById("tabLogin").style.color = "#333";
+        document.getElementById("tabForgot").style.background = "#f0f0f0";
+        document.getElementById("tabForgot").style.color = "#333";
+      }
+
+      // ======================= HIỂN THỊ FORM QUÊN MẬT KHẨU =======================
+      function showForgot() {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("registerForm").style.display = "none";
+        document.getElementById("forgotForm").style.display = "block";
+
+        document.getElementById("tabForgot").style.background = "#3498db";
+        document.getElementById("tabForgot").style.color = "white";
+        document.getElementById("tabLogin").style.background = "#f0f0f0";
+        document.getElementById("tabLogin").style.color = "#333";
+        document.getElementById("tabRegister").style.background = "#f0f0f0";
+        document.getElementById("tabRegister").style.color = "#333";
+
+        // Reset form - HIỂN THỊ LẠI BƯỚC 1
+        document.getElementById("step1Forgot").style.display = "block";
+        document.getElementById("step2Forgot").style.display = "none";
+        document.getElementById("forgotPhone").value = "";
+        document.getElementById("otpCode").value = "";
+        document.getElementById("newPassword").value = "";
+        document.getElementById("confirmPassword").value = "";
+        document.getElementById("forgotMessage").style.display = "none";
+        sessionStorage.removeItem("resetPhone");
+      }
+    </script>
+
+    <script src="script.js"></script>
+
+    <!-- MODAL CHI TIẾT TIN ĐĂNG – ĐẸP NHƯ CHOTHUENHA.COM.VN -->
+    <div
+      id="detailModal"
+      style="
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 9999;
+        padding: 20px;
+        overflow-y: auto;
+      "
+    >
+      <div
+        style="
+          max-width: 1000px;
+          margin: 30px auto;
+          background: white;
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+          position: relative;
+        "
+      >
+        <span
+          onclick="document.getElementById('detailModal').style.display='none'"
+          style="
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+            z-index: 10;
+          "
+          >×</span
+        >
+
+        <!-- Ảnh lớn -->
+        <img
+          id="detailImg"
+          src=""
+          style="width: 100%; height: 500px; object-fit: cover"
+        />
+
+        <div style="padding: 30px">
+          <h1
+            style="
+              color: #e74c3c;
+              font-size: 28px;
+              margin: 0 0 15px 0;
+              line-height: 1.3;
+              min-height: 60px;
+            "
+            id="detailTitle"
+          >
+            CHÍNH CHỦ CHO THUÊ NHÀ
+          </h1>
+
+          <div
+            style="
+              font-size: 32px;
+              font-weight: bold;
+              color: #e74c3c;
+              margin: 15px 0;
+            "
+          >
+            <span id="detailPrice">12 triệu/tháng</span>
+            <span
+              style="font-size: 20px; color: #666; margin-left: 20px"
+              id="detailArea"
+              >300 m²</span
+            >
+          </div>
+
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 20px;
+              color: #666;
+              font-size: 16px;
+              margin: 20px 0;
+            "
+          >
+            <span id="detailLocation"
+              ><i class="fas fa-map-marker-alt"></i> Bình Thạnh, Hồ Chí
+              Minh</span
+            >
+            <span id="detailTime"
+              ><i class="far fa-clock"></i> Cập nhật: 1 ngày trước</span
+            >
+          </div>
+
+          <div
+            style="
+              background: #e74c3c;
+              color: white;
+              padding: 30px;
+              border-radius: 16px;
+              text-align: center;
+              margin: 30px 0;
+            "
+          >
+            <h3 style="margin: 0 0 15px; font-size: 24px">
+              Liên hệ ngay: 0769969928 (Có Zalo)
+            </h3>
+            <button
+              style="
+                background: white;
+                color: #e74c3c;
+                padding: 15px 50px;
+                border: none;
+                border-radius: 50px;
+                font-size: 20px;
+                font-weight: bold;
+                cursor: pointer;
+              "
+            >
+              GỌI NGAY
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM ĐĂNG TIN – SIÊU ĐẸP, CHẠY NGAY -->
+    <div
+      id="postModal"
+      style="
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 9999;
+        padding: 20px;
+        overflow-y: auto;
+      "
+    >
+      <div
+        style="
+          max-width: 800px;
+          margin: 30px auto;
+          background: white;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        "
+      >
+        <div
+          class="post-header"
+          style="
+            padding: 25px;
+            font-size: 26px;
+            font-weight: bold;
+            text-align: center;
+            position: relative;
+          "
+        >
+          <span
+            onclick="document.getElementById('postModal').style.display='none'"
+            style="
+              position: absolute;
+              top: 15px;
+              right: 25px;
+              font-size: 40px;
+              cursor: pointer;
+            "
+            >×</span
+          >
+          ĐĂNG TIN CHO THUÊ
+        </div>
+        <div style="padding: 40px">
+          <input
+            type="text"
+            id="postTitle"
+            placeholder="Tiêu đề tin đăng (bắt buộc)"
+            style="
+              width: 100%;
+              padding: 15px;
+              margin: 15px 0;
+              border: 2px solid #ddd;
+              border-radius: 12px;
+              font-size: 18px;
+              box-sizing: border-box;
+            "
+          />
+          <input
+            type="text"
+            id="postAddress"
+            placeholder="Địa chỉ chi tiết (bắt buộc)"
+            style="
+              width: 100%;
+              padding: 15px;
+              margin: 15px 0;
+              border: 2px solid #ddd;
+              border-radius: 12px;
+              font-size: 18px;
+              box-sizing: border-box;
+            "
+          />
+          <input
+            type="number"
+            id="postPrice"
+            placeholder="Giá cho thuê (triệu/tháng)"
+            style="
+              width: 100%;
+              padding: 15px;
+              margin: 15px 0;
+              border: 2px solid #ddd;
+              border-radius: 12px;
+              font-size: 18px;
+              box-sizing: border-box;
+            "
+          />
+          <input
+            type="number"
+            id="postArea"
+            placeholder="Diện tích (m²)"
+            style="
+              width: 100%;
+              padding: 15px;
+              margin: 15px 0;
+              border: 2px solid #ddd;
+              border-radius: 12px;
+              font-size: 18px;
+              box-sizing: border-box;
+            "
+          />
+          <textarea
+            id="postDesc"
+            rows="6"
+            placeholder="Mô tả chi tiết nhà, tiện ích, liên hệ..."
+            style="
+              width: 100%;
+              padding: 15px;
+              margin: 15px 0;
+              border: 2px solid #ddd;
+              border-radius: 12px;
+              font-size: 18px;
+              resize: vertical;
+              box-sizing: border-box;
+            "
+          ></textarea>
+          <!-- Dropzone + file input -->
+          <div id="dropZone" class="dropzone">
+            Kéo thả ảnh vào đây hoặc
+            <button
+              id="chooseFilesBtn"
+              style="
+                background: none;
+                border: none;
+                color: var(--accent-burgundy);
+                font-weight: bold;
+                cursor: pointer;
+              "
+            >
+              chọn ảnh
+            </button>
+          </div>
+          <input
+            type="file"
+            id="postImages"
+            multiple
+            accept="image/*"
+            style="margin: 20px 0; display: none"
+          />
+          <div id="imagePreview" class="image-previews"></div>
+          <div style="text-align: center">
+            <button
+              onclick="submitPost()"
+              style="
+                background: #e74c3c;
+                color: white;
+                padding: 18px 80px;
+                border: none;
+                border-radius: 50px;
+                font-size: 22px;
+                font-weight: bold;
+                cursor: pointer;
+              "
+            >
+              ĐĂNG TIN NGAY
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
