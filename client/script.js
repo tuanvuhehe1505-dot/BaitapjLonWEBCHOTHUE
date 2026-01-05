@@ -14,22 +14,25 @@ function updateImageCount() {
 
 // ==================== MODAL HANDLERS ====================
 document.addEventListener("DOMContentLoaded", function () {
-  // Ẩn/hiện thanh lọc khi cuộn trên mobile
+  // Ẩn/hiện header khi cuộn trên mobile
   let lastScrollY = window.scrollY;
   const searchSection = document.getElementById("searchSection");
+  const mainHeader = document.querySelector(".main-header");
   function handleScroll() {
-    if (!searchSection) return;
     const isMobile = window.innerWidth <= 768;
     if (!isMobile) {
-      searchSection.classList.remove("hide-on-scroll");
+      if (searchSection) searchSection.classList.remove("hide-on-scroll");
+      if (mainHeader) mainHeader.classList.remove("hide-on-scroll");
       return;
     }
     if (window.scrollY > lastScrollY && window.scrollY > 80) {
-      // Cuộn xuống, ẩn thanh lọc
-      searchSection.classList.add("hide-on-scroll");
+      // Cuộn xuống, ẩn header
+      if (mainHeader) mainHeader.classList.add("hide-on-scroll");
+      if (searchSection) searchSection.classList.add("hide-on-scroll");
     } else {
-      // Cuộn lên, hiện thanh lọc
-      searchSection.classList.remove("hide-on-scroll");
+      // Cuộn lên, hiện header
+      if (mainHeader) mainHeader.classList.remove("hide-on-scroll");
+      if (searchSection) searchSection.classList.remove("hide-on-scroll");
     }
     lastScrollY = window.scrollY;
   }
@@ -201,6 +204,12 @@ function closeDetailModal() {
     modal.classList.remove("active");
     modal.style.display = "none";
   }
+}
+
+function callPhone() {
+  const phoneEl = document.getElementById("detailPhone");
+  const phone = phoneEl ? phoneEl.textContent : "0344886556";
+  window.open(`tel:${phone}`, "_blank");
 }
 
 function openPostModal() {
