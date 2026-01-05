@@ -14,6 +14,28 @@ function updateImageCount() {
 
 // ==================== MODAL HANDLERS ====================
 document.addEventListener("DOMContentLoaded", function () {
+  // Ẩn/hiện thanh lọc khi cuộn trên mobile
+  let lastScrollY = window.scrollY;
+  const searchSection = document.getElementById("searchSection");
+  function handleScroll() {
+    if (!searchSection) return;
+    const isMobile = window.innerWidth <= 768;
+    if (!isMobile) {
+      searchSection.classList.remove("hide-on-scroll");
+      return;
+    }
+    if (window.scrollY > lastScrollY && window.scrollY > 80) {
+      // Cuộn xuống, ẩn thanh lọc
+      searchSection.classList.add("hide-on-scroll");
+    } else {
+      // Cuộn lên, hiện thanh lọc
+      searchSection.classList.remove("hide-on-scroll");
+    }
+    lastScrollY = window.scrollY;
+  }
+  window.addEventListener("scroll", handleScroll);
+  window.addEventListener("resize", handleScroll);
+  handleScroll();
   // Modal tabs handler
   const modalTabs = document.querySelectorAll(".modal-tab");
   modalTabs.forEach((tab) => {
