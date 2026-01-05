@@ -235,4 +235,43 @@ router.get("/me", authenticateToken, async (req, res) => {
   }
 });
 
+// ======================= TẠO ADMIN (CHỈ ADMIN HIỆU LỆNH) =======================
+router.post("/create-admin", authenticateToken, async (req, res) => {
+  try {
+    // only admin can create other admins
+    if (!req.user || req.user.role !== "admin") {
+      return res.status(403).json({ message: "Chỉ admin mới được phép" });
+    }
+
+    const { name, phone, password } = req.body;
+    if (!name || !phone || !password) {
+      return res
+        .status(400)
+        .json({ message: "Vui lòng điền tên, số điện thoại và mật khẩu" });
+    }
+
+    const existing = await User.findOne({ phone });
+    if (existing) {
+      return res.status(400).json({ message: "Số điện thoại đã tồn tại" });
+    }
+
+    const hashed = await bcrypt.hash(password, 10);
+    const user = new User({ name, phone, password: hashed, role: "admin" });
+    await user.save();
+
+    res.status(201).json({
+      message: "Tạo admin thành công",
+      user: {
+        id: user._id,
+        name: user.name,
+        phone: user.phone,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error("❌ Create Admin Error:", error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 module.exports = router;

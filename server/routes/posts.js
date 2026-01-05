@@ -27,7 +27,11 @@ const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
 // GET posts (expose full URLs for photos)
 router.get("/", async (req, res) => {
   try {
-    const posts = await Post.find().sort({ createdAt: -1 });
+    const posts = await Post.find()
+      .select(
+        "title price area location photos vip user district rentalModel createdAt timestamps"
+      )
+      .sort({ createdAt: -1 });
     const host = req.protocol + "://" + req.get("host");
     const transformed = posts.map((p) => {
       const obj = p.toObject();
@@ -69,7 +73,15 @@ router.post(
           .json({ message: "Chỉ admin mới được phép đăng tin" });
       }
 
-      const { title, address, price, area, description } = req.body;
+      const {
+        title,
+        address,
+        price,
+        area,
+        description,
+        district,
+        rentalModel,
+      } = req.body;
       if (!title || !address || !price || !area) {
         return res.status(400).json({ message: "Thiếu thông tin bắt buộc" });
       }
@@ -78,9 +90,17 @@ router.post(
       const files = req.files || [];
       const filenames = files.map((f) => f.filename);
 
+      // If no uploaded files but client provided an image URL fallback, accept it
+      if ((!filenames || filenames.length === 0) && req.body.image) {
+        // allow direct URL in photos array
+        filenames.push(req.body.image);
+      }
+
       const newPost = new Post({
         title,
         location: address,
+        district: district || "",
+        rentalModel: rentalModel || "",
         price,
         area,
         description,

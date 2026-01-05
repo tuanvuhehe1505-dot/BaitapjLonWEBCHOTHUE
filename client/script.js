@@ -1,15 +1,275 @@
 const API = "http://localhost:3000/api";
-// Global rooms array used by renderRooms()
 let rooms = [];
-// Selected files for upload (drag-drop or file input)
+let allPostsRaw = [];
+let filteredRoomsCache = [];
+let currentPage = 1;
+const PAGE_SIZE = 20;
 let selectedFiles = [];
+let currentFilterLetter = "";
+
+function updateImageCount() {
+  const el = document.getElementById("imageCount");
+  if (el) el.textContent = selectedFiles.length;
+}
+
+// ==================== MODAL HANDLERS ====================
+document.addEventListener("DOMContentLoaded", function () {
+  // Modal tabs handler
+  const modalTabs = document.querySelectorAll(".modal-tab");
+  modalTabs.forEach((tab) => {
+    tab.addEventListener("click", function () {
+      const tabName = this.getAttribute("data-tab");
+      const modal = this.closest(".modal");
+
+      // Remove active from all tabs
+      modal
+        .querySelectorAll(".modal-tab")
+        .forEach((t) => t.classList.remove("active"));
+      modal
+        .querySelectorAll(".modal-form")
+        .forEach((f) => f.classList.remove("active"));
+
+      // Add active to clicked tab
+      this.classList.add("active");
+      const form = modal.querySelector("#" + tabName + "Form");
+      if (form) form.classList.add("active");
+    });
+  });
+
+  // Auth link handler
+  const loginLink = document.getElementById("loginLink");
+  if (loginLink) {
+    loginLink.addEventListener("click", function (e) {
+      e.preventDefault();
+      openAuthModal("login");
+    });
+  }
+
+  const registerLink = document.getElementById("registerLink");
+  if (registerLink) {
+    registerLink.addEventListener("click", function (e) {
+      e.preventDefault();
+      openAuthModal("register");
+    });
+  }
+
+  // Auth status / debug button
+  const authStatusBtn = document.getElementById("authStatusBtn");
+  if (authStatusBtn) {
+    authStatusBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const token = localStorage.getItem("token");
+      const user = localStorage.getItem("user");
+      if (!token) {
+        alert("Chưa đăng nhập. LocalStorage.user not found.");
+        return;
+      }
+      try {
+        const resp = await fetch(`${API}/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!resp.ok) {
+          const err = await resp.json().catch(() => ({}));
+          alert("Token không hợp lệ: " + (err.message || resp.statusText));
+          return;
+        }
+        const body = await resp.json();
+        alert("Đã xác thực: " + JSON.stringify(body.user || body));
+      } catch (err) {
+        alert("Lỗi kết nối tới server: " + (err.message || err));
+      }
+    });
+  }
+
+  // Post button handler
+  const postBtn = document.getElementById("postBtn");
+  if (postBtn) {
+    postBtn.addEventListener("click", openPostModal);
+  }
+
+  // Close modals when clicking backdrop
+  const modals = document.querySelectorAll(".modal");
+  modals.forEach((modal) => {
+    modal.addEventListener("click", function (e) {
+      if (e.target === this) {
+        closeModal(this);
+      }
+    });
+  });
+
+  // Dropzone handler
+  const dropZone = document.getElementById("dropZone");
+  if (dropZone) {
+    dropZone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropZone.style.background = "rgba(231, 76, 60, 0.1)";
+    });
+
+    dropZone.addEventListener("dragleave", () => {
+      dropZone.style.background = "";
+    });
+
+    dropZone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      const files = e.dataTransfer.files;
+      handleFilesSelect(files);
+    });
+  }
+
+  // File input handler
+  const postImages = document.getElementById("postImages");
+  if (postImages) {
+    postImages.addEventListener("change", function () {
+      handleFilesSelect(this.files);
+    });
+  }
+
+  // Update header based on login state (hide post button by default; only admins see it)
+  try {
+    const storedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    const guestMenu = document.getElementById("guestMenu");
+    const userMenu = document.getElementById("userMenu");
+    const postBtn = document.getElementById("postBtn");
+
+    if (storedUser && token) {
+      const u = JSON.parse(storedUser);
+      if (userMenu) {
+        userMenu.style.display = "flex";
+        const nameEl = document.getElementById("userName");
+        if (nameEl)
+          nameEl.textContent = u.name || u.fullname || u.phone || "Người dùng";
+      }
+      if (guestMenu) guestMenu.style.display = "none";
+      if (postBtn)
+        postBtn.style.display = u.role === "admin" ? "inline-flex" : "none";
+    } else {
+      if (guestMenu) guestMenu.style.display = "flex";
+      if (userMenu) userMenu.style.display = "none";
+      if (postBtn) postBtn.style.display = "none";
+    }
+  } catch (e) {
+    console.warn("Error updating header state", e);
+  }
+});
+
+function openAuthModal() {
+  const tab = arguments.length && arguments[0] ? arguments[0] : "login";
+  const modal = document.getElementById("authModal");
+  if (modal) {
+    modal.classList.add("active");
+    modal.style.display = "flex";
+    // activate requested tab
+    const tabBtn = modal.querySelector(`.modal-tab[data-tab="${tab}"]`);
+    if (tabBtn) tabBtn.click();
+  }
+}
+
+function closeAuthModal() {
+  const modal = document.getElementById("authModal");
+  if (modal) {
+    modal.classList.remove("active");
+    modal.style.display = "none";
+  }
+}
+
+function closeDetailModal() {
+  const modal = document.getElementById("detailModal");
+  if (modal) {
+    modal.classList.remove("active");
+    modal.style.display = "none";
+  }
+}
+
+function openPostModal() {
+  const user = localStorage.getItem("user");
+  const token = localStorage.getItem("token");
+
+  if (!user || !token) {
+    alert("Vui lòng đăng nhập để đăng tin");
+    openAuthModal();
+    return;
+  }
+
+  const modal = document.getElementById("postModal");
+  if (modal) {
+    modal.classList.add("active");
+    modal.style.display = "flex";
+  }
+}
+
+function closePostModal() {
+  const modal = document.getElementById("postModal");
+  if (modal) {
+    modal.classList.remove("active");
+    modal.style.display = "none";
+  }
+}
+
+function closeModal(modal) {
+  modal.classList.remove("active");
+  modal.style.display = "none";
+}
+
+function handleFilesSelect(files) {
+  // append new files, cap at 12
+  selectedFiles = (selectedFiles || [])
+    .concat(Array.from(files || []))
+    .slice(0, 12);
+  const preview = document.getElementById("imagePreview");
+  if (preview) {
+    preview.innerHTML = selectedFiles
+      .map(
+        (file, index) => `
+            <div class="image-preview">
+                <img src="${URL.createObjectURL(file)}" alt="Preview ${
+          index + 1
+        }">
+                <button type="button" class="img-remove-btn" onclick="removeImage(${index})">×</button>
+            </div>
+        `
+      )
+      .join("");
+  }
+  updateImageCount();
+}
+
+function removeImage(index) {
+  selectedFiles.splice(index, 1);
+  const preview = document.getElementById("imagePreview");
+  if (preview) {
+    preview.innerHTML = selectedFiles
+      .map(
+        (file, i) => `
+            <div class="image-preview">
+                <img src="${URL.createObjectURL(file)}" alt="Preview ${i + 1}">
+                <button type="button" class="img-remove-btn" onclick="removeImage(${i})">×</button>
+            </div>
+        `
+      )
+      .join("");
+  }
+  updateImageCount();
+}
+
+// (Consolidated auth functions are defined later in the file)
 
 // ======================= HIỂN THỊ DANH SÁCH =======================
 function renderRooms() {
   const list = document.getElementById("roomList");
   if (!list) return;
 
-  list.innerHTML = rooms
+  // apply alphabet filter if set
+  const filtered = currentFilterLetter
+    ? rooms.filter((r) => {
+        const title = (r.title || "")
+          .normalize("NFD")
+          .replace(/\p{Diacritic}/gu, "");
+        return title.charAt(0).toUpperCase() === currentFilterLetter;
+      })
+    : rooms;
+
+  list.innerHTML = filtered
     .map(
       (room) => `
     <div class="listing-card" onclick="showDetail(this)">
@@ -41,6 +301,199 @@ function renderRooms() {
     .join("");
 }
 
+// Apply UI filters + keyword search and render
+function applyFilters(page = 1) {
+  const kw = (document.getElementById("search")?.value || "")
+    .trim()
+    .toLowerCase();
+  const model = document.getElementById("modelFilter")?.value || "";
+  const district = document.getElementById("districtFilter")?.value || "";
+  const area = document.getElementById("areaFilter")?.value || "";
+  const price = document.getElementById("priceFilter")?.value || "";
+
+  console.log("🔍 Filtering:", {
+    kw,
+    model,
+    district,
+    area,
+    price,
+    totalRooms: rooms.length,
+  });
+
+  const filtered = rooms.filter((r) => {
+    // keyword in title or location
+    if (kw) {
+      const hay = (r.title + " " + (r.location || "")).toLowerCase();
+      if (!hay.includes(kw)) return false;
+    }
+    if (model) {
+      if ((r.rentalModel || "") !== model) return false;
+    }
+    if (district) {
+      if ((r.district || "") !== district) return false;
+    }
+    if (area) {
+      const a = Number(r.area) || 0;
+      if (area === "lt30" && !(a < 30)) return false;
+      if (area === "lt50" && !(a < 50)) return false;
+      if (area === "lt100" && !(a < 100)) return false;
+      if (area === "gt50" && !(a > 50)) return false;
+      if (area === "gte100" && !(a >= 100)) return false;
+    }
+    if (price) {
+      const p =
+        Number((r.price || "").toString().replace(/[^0-9\.]/g, "")) || 0;
+      if (price === "lt5" && !(p < 5)) return false;
+      if (price === "lt10" && !(p < 10)) return false;
+      if (price === "lt30" && !(p < 30)) return false;
+      if (price === "lt50" && !(p < 50)) return false;
+      if (price === "lt100" && !(p < 100)) return false;
+      if (price === "gt100" && !(p > 100)) return false;
+    }
+    return true;
+  });
+
+  filteredRoomsCache = filtered;
+  currentPage = page;
+  console.log(
+    "✅ Filtered results:",
+    filtered.length,
+    "items from",
+    rooms.length
+  );
+  renderPage();
+}
+
+function resetFilters() {
+  document.getElementById("search").value = "";
+  document.getElementById("modelFilter").value = "";
+  document.getElementById("districtFilter").value = "";
+  document.getElementById("areaFilter").value = "";
+  document.getElementById("priceFilter").value = "";
+  applyFilters(1);
+}
+
+// Filter by rental model from menu
+function filterByModel(model) {
+  document.getElementById("modelFilter").value = model;
+  document.getElementById("search").value = "";
+  document.getElementById("districtFilter").value = "";
+  document.getElementById("areaFilter").value = "";
+  document.getElementById("priceFilter").value = "";
+  applyFilters(1);
+}
+
+function renderPage() {
+  const list = document.getElementById("roomList");
+  if (!list) return;
+  const total = filteredRoomsCache.length;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  if (currentPage > totalPages) currentPage = totalPages;
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = filteredRoomsCache.slice(start, start + PAGE_SIZE);
+
+  list.innerHTML = pageItems
+    .map(
+      (room) => `
+    <div class="listing-card" onclick="showDetail(this)">
+      <div class="card-image" style="position:relative;">
+        <img src="${room.img}" alt="">
+        ${room.vip ? '<span class="vip-badge">VIP</span>' : ""}
+        <span class="photo-count"><i class="fas fa-image"></i> ${
+          room.photos
+        }</span>
+      </div>
+      <div class="card-content">
+        <h3>${room.title}</h3>
+        <div class="price-location">
+          <span class="price" style="color:#e74c3c; font-weight:bold; font-size:18px;">${
+            room.price
+          } triệu</span>
+          <span class="location"><i class="fas fa-map-marker-alt"></i> ${
+            room.location
+          } ${room.district ? " - " + room.district : ""}</span>
+        </div>
+        <div class="card-footer">
+          <span><i class="far fa-clock"></i> ${room.time}</span>
+          <span><i class="fas fa-eye"></i> ${room.views} lượt xem</span>
+        </div>
+      </div>
+    </div>
+  `
+    )
+    .join("");
+
+  renderPaginationControls(total, totalPages);
+}
+
+function renderPaginationControls(totalItems, totalPages) {
+  let pagination = document.getElementById("paginationControls");
+  if (!pagination) {
+    pagination = document.createElement("div");
+    pagination.id = "paginationControls";
+    pagination.style = "text-align:center; margin:18px 0;";
+    const container = document.querySelector(".container");
+    if (container) container.appendChild(pagination);
+  }
+
+  if (totalPages <= 1) {
+    pagination.innerHTML = "";
+    return;
+  }
+
+  // build number buttons
+  const pages = [];
+  for (let i = 1; i <= totalPages; i++) pages.push(i);
+
+  pagination.innerHTML = pages
+    .map(
+      (p) =>
+        `<button class="page-btn" data-page="${p}" style="margin:0 6px;padding:8px 12px;border-radius:6px;border:1px solid #ddd;background:${
+          p === currentPage ? "#e74c3c" : "white"
+        };color:${
+          p === currentPage ? "white" : "#333"
+        };cursor:pointer">${p}</button>`
+    )
+    .join("");
+
+  pagination.querySelectorAll(".page-btn").forEach((b) => {
+    b.onclick = () => {
+      const p = Number(b.getAttribute("data-page"));
+      currentPage = p;
+      renderPage();
+      window.scrollTo({ top: 200, behavior: "smooth" });
+    };
+  });
+}
+
+// Build alphabet bar (A-Z + Tất cả)
+function buildAlphabetBar() {
+  const container = document.getElementById("alphabetBar");
+  if (!container) return;
+  const letters = ["Tất cả"];
+  for (let i = 65; i <= 90; i++) letters.push(String.fromCharCode(i));
+  container.innerHTML = letters
+    .map((l) => {
+      const data = l === "Tất cả" ? "" : l;
+      const cls = l === "Tất cả" ? "alpha-btn active" : "alpha-btn";
+      return `<button class="${cls}" data-letter="${data}">${l}</button>`;
+    })
+    .join("");
+
+  container.addEventListener("click", (e) => {
+    const btn = e.target.closest(".alpha-btn");
+    if (!btn) return;
+    // remove active
+    container
+      .querySelectorAll(".alpha-btn")
+      .forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    const letter = btn.getAttribute("data-letter") || "";
+    currentFilterLetter = letter;
+    renderRooms();
+  });
+}
+
 function showDetail(element) {
   const room =
     rooms[
@@ -52,6 +505,7 @@ function showDetail(element) {
   const detailLocation = document.getElementById("detailLocation");
   const detailTime = document.getElementById("detailTime");
   const detailImg = document.getElementById("detailImg");
+  const detailDesc = document.getElementById("detailDesc");
   const detailModal = document.getElementById("detailModal");
 
   if (detailTitle) detailTitle.textContent = room.title;
@@ -63,6 +517,8 @@ function showDetail(element) {
   if (detailTime)
     detailTime.innerHTML = `<i class="far fa-clock"></i> Cập nhật: ${room.time}`;
   if (detailImg) detailImg.src = room.img;
+  if (detailDesc)
+    detailDesc.textContent = room.description || "Chưa có mô tả chi tiết";
   if (detailModal) detailModal.style.display = "block";
 }
 
@@ -85,6 +541,11 @@ async function register() {
     return;
   }
 
+  const errEl = document.getElementById("registerError");
+  if (errEl) {
+    errEl.style.display = "none";
+    errEl.textContent = "";
+  }
   try {
     const response = await fetch(`${API}/auth/register`, {
       method: "POST",
@@ -95,16 +556,26 @@ async function register() {
     const data = await response.json();
 
     if (response.ok) {
-      alert("✅ Đăng ký thành công! Vui lòng đăng nhập.");
       showLogin();
       document.getElementById("regName").value = "";
       document.getElementById("regPhone").value = "";
       document.getElementById("regPass").value = "";
+      alert("Đăng ký thành công! Vui lòng đăng nhập.");
     } else {
-      alert(`❌ Lỗi: ${data.message || "Đăng ký thất bại"}`);
+      if (errEl) {
+        errEl.style.display = "block";
+        errEl.textContent = data.message || "Đăng ký thất bại";
+      } else {
+        alert(`Lỗi: ${data.message || "Đăng ký thất bại"}`);
+      }
     }
   } catch (error) {
-    alert(`❌ Lỗi: ${error.message}`);
+    if (errEl) {
+      errEl.style.display = "block";
+      errEl.textContent = error.message || "Lỗi mạng";
+    } else {
+      alert(`Lỗi: ${error.message}`);
+    }
   }
 }
 
@@ -118,6 +589,11 @@ async function login() {
     return;
   }
 
+  const errEl = document.getElementById("loginError");
+  if (errEl) {
+    errEl.style.display = "none";
+    errEl.textContent = "";
+  }
   try {
     const response = await fetch(`${API}/auth/login`, {
       method: "POST",
@@ -130,7 +606,23 @@ async function login() {
     if (response.ok) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      alert("✅ Đăng nhập thành công!");
+
+      // verify token with /auth/me (optional, gives clearer error)
+      try {
+        const me = await fetch(`${API}/auth/me`, {
+          headers: { Authorization: `Bearer ${data.token}` },
+        });
+        if (!me.ok) {
+          // token invalid on server
+          throw new Error("Token không hợp lệ");
+        }
+      } catch (e) {
+        if (errEl) {
+          errEl.style.display = "block";
+          errEl.textContent = e.message || "Lỗi xác thực";
+        }
+        return;
+      }
 
       // Đóng modal
       const authModal = document.getElementById("authModal");
@@ -145,10 +637,20 @@ async function login() {
       // Cập nhật menu
       updateUserMenu();
     } else {
-      alert(`❌ Lỗi: ${data.message || "Đăng nhập thất bại"}`);
+      if (errEl) {
+        errEl.style.display = "block";
+        errEl.textContent = data.message || "Đăng nhập thất bại";
+      } else {
+        alert(`Lỗi: ${data.message || "Đăng nhập thất bại"}`);
+      }
     }
   } catch (error) {
-    alert(`❌ Lỗi: ${error.message}`);
+    if (errEl) {
+      errEl.style.display = "block";
+      errEl.textContent = error.message || "Lỗi mạng";
+    } else {
+      alert(`Lỗi: ${error.message}`);
+    }
   }
 }
 
@@ -186,12 +688,84 @@ function updateUserMenu() {
       userNameEl.innerHTML = `${
         parsed.name || parsed.phone
       } <i class="fas fa-caret-down"></i>`;
+      // add role badge
+      const existingBadge = document.querySelector(".role-badge");
+      if (existingBadge) existingBadge.remove();
+      const span = document.createElement("span");
+      span.className = "role-badge";
+      span.textContent = parsed.role || "user";
+      userNameEl.parentElement.insertBefore(span, userNameEl.nextSibling);
+      // Show/hide post button based on role
+      const postBtn = document.querySelector(".post-btn");
+      if (postBtn) {
+        postBtn.style.display =
+          parsed.role === "admin" ? "inline-block" : "none";
+      }
+
+      // If admin, add "Thêm admin" entry to user dropdown (avoid duplicates)
+      const userDropdown =
+        userNameEl.parentElement.querySelector(".user-dropdown");
+      if (userDropdown) {
+        // remove existing admin link if any
+        const existingAddAdmin = userDropdown.querySelector(".add-admin-link");
+        if (existingAddAdmin) existingAddAdmin.remove();
+        if (parsed.role === "admin") {
+          const a = document.createElement("a");
+          a.href = "#";
+          a.className = "add-admin-link";
+          a.innerHTML = '<i class="fas fa-user-shield"></i> Thêm admin';
+          a.onclick = (ev) => {
+            ev.preventDefault();
+            createAdmin();
+          };
+          // insert at top
+          userDropdown.insertBefore(a, userDropdown.firstChild);
+        }
+      }
     } catch (e) {
       console.error("❌ Lỗi parse user:", e);
     }
   } else if (guestMenu && userMenu) {
     guestMenu.style.display = "block";
     userMenu.style.display = "none";
+    const postBtn = document.querySelector(".post-btn");
+    if (postBtn) postBtn.style.display = "none";
+  }
+}
+
+// ======================= TẠO ADMIN (giao diện nhanh) =======================
+async function createAdmin() {
+  try {
+    const name = prompt("Tên admin mới (ví dụ: Nguyễn Văn A)");
+    if (!name) return alert("Hủy tạo admin.");
+    const phone = prompt("Số điện thoại admin (ví dụ: 0987654321)");
+    if (!phone) return alert("Hủy tạo admin.");
+    const password = prompt("Mật khẩu cho admin (tối thiểu 6 ký tự)");
+    if (!password || password.length < 6)
+      return alert("Mật khẩu phải có ít nhất 6 ký tự.");
+
+    const token = localStorage.getItem("token");
+    if (!token)
+      return alert("Bạn phải đăng nhập với tài khoản admin để tạo admin khác.");
+
+    const resp = await fetch(`${API}/auth/create-admin`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({ name, phone, password }),
+    });
+
+    const result = await resp.json();
+    if (resp.ok) {
+      alert("✅ Tạo admin thành công: " + phone);
+    } else {
+      alert("❌ Lỗi: " + (result.message || "Tạo admin thất bại"));
+    }
+  } catch (err) {
+    console.error("Create admin error:", err);
+    alert("❌ Lỗi mạng: " + (err.message || err));
   }
 }
 
@@ -215,6 +789,9 @@ async function loadPosts() {
       title: p.title || p.address || p.location || "Tin đăng",
       price: p.price || "Thỏa thuận",
       location: p.address || p.location || "",
+      district: p.district || "",
+      rentalModel: p.rentalModel || "",
+      description: p.description || "Chưa có mô tả chi tiết",
       time: p.createdAt
         ? new Date(p.createdAt).toLocaleDateString()
         : "Mới đăng",
@@ -224,8 +801,18 @@ async function loadPosts() {
 
     console.log("✅ Tin từ backend:", posts);
 
+    // Log chi tiết từng bài viết
+    posts.forEach((p, i) => {
+      console.log(`Bài ${i + 1}:`, {
+        title: p.title,
+        district: p.district,
+        rentalModel: p.rentalModel,
+        price: p.price,
+      });
+    });
+
     // Render after updating rooms
-    renderRooms();
+    applyFilters();
   } catch (error) {
     console.log("⚠️ Không thể kết nối backend:", error.message);
   }
@@ -240,6 +827,9 @@ document.addEventListener("DOMContentLoaded", function () {
     loadPosts();
   });
 
+  // build alphabet filter
+  buildAlphabetBar();
+
   // Setup dropzone and file input for post images
   const dropZone = document.getElementById("dropZone");
   const fileInput = document.getElementById("postImages");
@@ -250,12 +840,22 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!previewContainer) return;
     previewContainer.innerHTML = "";
     selectedFiles.forEach((file, idx) => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "image-preview";
       const url = URL.createObjectURL(file);
       const img = document.createElement("img");
       img.src = url;
       img.title = file.name;
-      previewContainer.appendChild(img);
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "img-remove-btn";
+      btn.textContent = "×";
+      btn.onclick = () => removeImage(idx);
+      wrapper.appendChild(img);
+      wrapper.appendChild(btn);
+      previewContainer.appendChild(wrapper);
     });
+    updateImageCount();
   }
 
   if (chooseBtn && fileInput) {
@@ -635,6 +1235,31 @@ function showForgot() {
   document.getElementById("forgotMessage").style.display = "none";
   sessionStorage.removeItem("resetPhone");
 }
+// Hiển thị form đăng nhập (tab)
+function showLogin() {
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
+  const forgotForm = document.getElementById("forgotForm");
+  if (loginForm) loginForm.style.display = "block";
+  if (registerForm) registerForm.style.display = "none";
+  if (forgotForm) forgotForm.style.display = "none";
+
+  const tabLogin = document.getElementById("tabLogin");
+  const tabRegister = document.getElementById("tabRegister");
+  const tabForgot = document.getElementById("tabForgot");
+  if (tabLogin) {
+    tabLogin.style.background = "#3498db";
+    tabLogin.style.color = "white";
+  }
+  if (tabRegister) {
+    tabRegister.style.background = "#f0f0f0";
+    tabRegister.style.color = "#333";
+  }
+  if (tabForgot) {
+    tabForgot.style.background = "#f0f0f0";
+    tabForgot.style.color = "#333";
+  }
+}
 // ======================= GỬI FORM ĐĂNG TIN =======================
 async function submitPost() {
   const title = document.getElementById("postTitle").value.trim();
@@ -660,9 +1285,25 @@ async function submitPost() {
     const form = new FormData();
     form.append("title", title);
     form.append("address", address);
+    const district = document.getElementById("postDistrict")
+      ? document.getElementById("postDistrict").value
+      : "";
+    const rentalModel = document.getElementById("postRentalModel")
+      ? document.getElementById("postRentalModel").value
+      : "";
     form.append("price", parseFloat(price));
     form.append("area", parseFloat(area));
     form.append("description", desc);
+    form.append("district", district);
+    form.append("rentalModel", rentalModel);
+
+    console.log("📝 Gửi đăng tin với:", {
+      title,
+      district,
+      rentalModel,
+      price,
+      area,
+    });
 
     // Append images (selectedFiles filled from dropzone/file input)
     if (selectedFiles && selectedFiles.length > 0) {
@@ -687,6 +1328,10 @@ async function submitPost() {
 
     if (response.ok) {
       alert("✅ Đăng tin thành công!");
+      console.log("💾 Bài viết lưu:", {
+        district: data.post?.district,
+        rentalModel: data.post?.rentalModel,
+      });
 
       // Reset form
       document.getElementById("postTitle").value = "";
@@ -705,7 +1350,7 @@ async function submitPost() {
 
       // Reload danh sách tin
       await loadPosts();
-      renderRooms();
+      applyFilters();
     } else {
       alert(`❌ Lỗi: ${data.message || "Đăng tin thất bại"}`);
     }
