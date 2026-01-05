@@ -1,4 +1,4 @@
-const API = "http://localhost:3000/api";
+const API = "https://baitapjlonwebchothue.onrender.com/api";
 let rooms = [];
 let allPostsRaw = [];
 let filteredRoomsCache = [];
