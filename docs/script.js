@@ -187,7 +187,6 @@ function openAuthModal() {
   const modal = document.getElementById("authModal");
   if (modal) {
     modal.classList.add("active");
-    modal.style.display = "flex";
     // activate requested tab
     const tabBtn = modal.querySelector(`.modal-tab[data-tab="${tab}"]`);
     if (tabBtn) tabBtn.click();
@@ -198,7 +197,6 @@ function closeAuthModal() {
   const modal = document.getElementById("authModal");
   if (modal) {
     modal.classList.remove("active");
-    modal.style.display = "none";
   }
 }
 
@@ -206,7 +204,6 @@ function closeDetailModal() {
   const modal = document.getElementById("detailModal");
   if (modal) {
     modal.classList.remove("active");
-    modal.style.display = "none";
   }
 }
 
@@ -232,7 +229,6 @@ function openPostModal() {
   console.log("📋 Modal element:", modal);
   if (modal) {
     modal.classList.add("active");
-    modal.style.display = "flex";
     console.log("✅ Modal displayed");
   } else {
     console.error("❌ postModal element not found!");
@@ -243,13 +239,11 @@ function closePostModal() {
   const modal = document.getElementById("postModal");
   if (modal) {
     modal.classList.remove("active");
-    modal.style.display = "none";
   }
 }
 
 function closeModal(modal) {
   modal.classList.remove("active");
-  modal.style.display = "none";
 }
 
 function handleFilesSelect(files) {
@@ -739,7 +733,7 @@ async function login() {
       // Đóng modal
       const authModal = document.getElementById("authModal");
       if (authModal) {
-        authModal.style.display = "none";
+        authModal.classList.remove("active");
       }
 
       // Reset form
