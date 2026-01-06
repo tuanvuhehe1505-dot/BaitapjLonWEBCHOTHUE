@@ -858,6 +858,7 @@ async function loadPosts() {
         p.photos && p.photos.length > 0
           ? p.photos[0]
           : p.image || "https://via.placeholder.com/400x300",
+      images: p.photos || (p.image ? [p.image] : []),
       photos: p.photos && p.photos.length ? p.photos.length : 1,
       vip: p.vip || false,
       title: p.title || p.address || p.location || "Tin đăng",
@@ -865,7 +866,7 @@ async function loadPosts() {
       location: p.address || p.location || "",
       district: p.district || "",
       rentalModel: p.rentalModel || "",
-      description: p.description || "Chưa có mô tả chi tiết",
+      description: p.description || p.desc || "Chưa có mô tả chi tiết",
       time: p.createdAt
         ? new Date(p.createdAt).toLocaleDateString()
         : "Mới đăng",
