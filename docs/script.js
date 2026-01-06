@@ -149,8 +149,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const userMenu = document.getElementById("userMenu");
     const postBtn = document.getElementById("postBtn");
 
+    console.log("🔍 Checking user state:", { storedUser, hasToken: !!token });
+
     if (storedUser && token) {
       const u = JSON.parse(storedUser);
+      console.log("👤 User role:", u.role, "| Full user:", u);
       if (userMenu) {
         userMenu.style.display = "flex";
         const nameEl = document.getElementById("userName");
@@ -158,9 +161,13 @@ document.addEventListener("DOMContentLoaded", function () {
           nameEl.textContent = u.name || u.fullname || u.phone || "Người dùng";
       }
       if (guestMenu) guestMenu.style.display = "none";
-      if (postBtn)
-        postBtn.style.display = u.role === "admin" ? "inline-flex" : "none";
+      if (postBtn) {
+        const isAdmin = u.role === "admin";
+        postBtn.style.display = isAdmin ? "inline-flex" : "none";
+        console.log("🔘 Post button display:", postBtn.style.display, "| isAdmin:", isAdmin);
+      }
     } else {
+      console.log("❌ Not logged in");
       if (guestMenu) guestMenu.style.display = "flex";
       if (userMenu) userMenu.style.display = "none";
       if (postBtn) postBtn.style.display = "none";
@@ -205,6 +212,7 @@ function callPhone() {
 }
 
 function openPostModal() {
+  console.log("🖱️ openPostModal clicked!");
   const user = localStorage.getItem("user");
   const token = localStorage.getItem("token");
 
@@ -214,10 +222,15 @@ function openPostModal() {
     return;
   }
 
+  console.log("✅ Opening post modal...");
   const modal = document.getElementById("postModal");
+  console.log("📋 Modal element:", modal);
   if (modal) {
     modal.classList.add("active");
     modal.style.display = "flex";
+    console.log("✅ Modal displayed");
+  } else {
+    console.error("❌ postModal element not found!");
   }
 }
 
