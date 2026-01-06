@@ -90,7 +90,6 @@ textarea {
   backdrop-filter: blur(6px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
-}
 
 .main-header:hover {
   box-shadow: 0 12px 40px rgba(19, 34, 198, 0.2);
@@ -406,7 +405,6 @@ textarea {
     position: sticky;
     top: 0;
   }
-}
 }
 
 .search-section.sticky-hide {
@@ -977,11 +975,13 @@ textarea {
   position: fixed;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
   z-index: 9999;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .modal.active {
@@ -998,6 +998,7 @@ textarea {
   max-height: 85vh;
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
 }
 
 .modal-large {
