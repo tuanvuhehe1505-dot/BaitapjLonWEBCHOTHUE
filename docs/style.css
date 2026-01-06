@@ -982,13 +982,13 @@ textarea {
   background: var(--bg-white);
   border-radius: 16px;
   width: 100%;
-  max-width: 480px;
+  max-width: 95vw;
   position: relative;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
 .modal-large {
-  max-width: 700px;
+  max-width: 520px;
 }
 
 .modal-close {
@@ -1212,7 +1212,7 @@ textarea {
 
 /* ==================== POST FORM ==================== */
 .post-form {
-  padding: 30px;
+  padding: 18px;
 }
 
 .form-row {

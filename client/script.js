@@ -235,10 +235,8 @@ function closeModal(modal) {
 }
 
 function handleFilesSelect(files) {
-  // append new files, cap at 12
-  selectedFiles = (selectedFiles || [])
-    .concat(Array.from(files || []))
-    .slice(0, 12);
+  // Chỉ lấy file mới, không nối thêm, fix bug lặp ảnh
+  selectedFiles = Array.from(files || []).slice(0, 12);
   const preview = document.getElementById("imagePreview");
   if (preview) {
     preview.innerHTML = selectedFiles
