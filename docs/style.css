@@ -982,6 +982,8 @@ textarea {
   justify-content: center;
   padding: 20px;
   overflow-y: auto;
+  min-height: 100vh;
+  width: 100%;
 }
 
 .modal.active {
