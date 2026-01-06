@@ -977,18 +977,19 @@ textarea {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.7);
   z-index: 9999;
-  align-items: center;
-  justify-content: center;
   padding: 20px;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .modal.active {
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-content {
@@ -1000,6 +1001,7 @@ textarea {
   overflow-y: auto;
   position: relative;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  margin: auto;
 }
 
 .modal-large {
@@ -1480,5 +1482,6 @@ textarea {
 .search-section.sticky-hide {
   transform: none;
 }
-/ *   U p d a t e d   0 1 / 0 6 / 2 0 2 6   2 1 : 4 1 : 3 2   * /  
+/ *   U p d a t e d   0 1 / 0 6 / 2 0 2 6   2 1 : 4 1 : 3 2   * / 
+ 
  
