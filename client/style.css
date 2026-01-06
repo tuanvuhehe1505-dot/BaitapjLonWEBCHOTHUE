@@ -975,15 +975,15 @@ textarea {
 .modal {
   display: none;
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(0, 0, 0, 0.7);
   z-index: 9999;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  overflow-y: auto;
-  min-height: 100vh;
-  width: 100%;
 }
 
 .modal.active {
@@ -999,6 +999,7 @@ textarea {
   overflow-y: auto;
   position: relative;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  margin: auto;
 }
 
 .modal-large {
