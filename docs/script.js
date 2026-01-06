@@ -562,7 +562,14 @@ function showDetail(element) {
     detailLocation.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${room.location}`;
   if (detailTime)
     detailTime.innerHTML = `<i class="far fa-clock"></i> Cập nhật: ${room.time}`;
-  if (detailImg) detailImg.src = room.img;
+  // Hiển thị ảnh đầu tiên từ images array hoặc img
+  if (detailImg) {
+    if (room.images && room.images.length > 0) {
+      detailImg.src = room.images[0];
+    } else {
+      detailImg.src = room.img;
+    }
+  }
   if (detailDesc)
     detailDesc.textContent = room.description || "Chưa có mô tả chi tiết";
   if (detailModal) detailModal.style.display = "block";
