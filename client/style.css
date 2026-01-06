@@ -1,4 +1,4 @@
-/* ==================== CSS VARIABLES & RESET ==================== */
+﻿/* ==================== CSS VARIABLES & RESET ==================== */
 :root {
   --primary-color: #1322c6;
   --accent-burgundy: #e74c3c;
@@ -118,7 +118,7 @@ textarea {
   transition: transform 0.3s ease;
   margin-left: 48px;
 }
-/* Tin đăng grid layout */
+/* Tin Ä‘Äƒng grid layout */
 .posts-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1416,7 +1416,7 @@ textarea {
   }
 }
 
-/* Dropdown lọc mô hình ở header */
+/* Dropdown lá»c mÃ´ hÃ¬nh á»Ÿ header */
 .header-center {
   display: flex;
   justify-content: center;
@@ -1477,6 +1477,3 @@ textarea {
 .search-section.sticky-hide {
   transform: none;
 }
-/ *   U p d a t e d   0 1 / 0 6 / 2 0 2 6   2 1 : 4 1 : 3 2   * / 
- 
- 
