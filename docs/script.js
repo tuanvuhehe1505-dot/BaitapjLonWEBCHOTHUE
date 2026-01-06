@@ -164,7 +164,12 @@ document.addEventListener("DOMContentLoaded", function () {
       if (postBtn) {
         const isAdmin = u.role === "admin";
         postBtn.style.display = isAdmin ? "inline-flex" : "none";
-        console.log("🔘 Post button display:", postBtn.style.display, "| isAdmin:", isAdmin);
+        console.log(
+          "🔘 Post button display:",
+          postBtn.style.display,
+          "| isAdmin:",
+          isAdmin
+        );
       }
     } else {
       console.log("❌ Not logged in");
@@ -226,8 +231,16 @@ function openPostModal() {
   const modal = document.getElementById("postModal");
   console.log("📋 Modal element:", modal);
   if (modal) {
+    // Force remove any inline styles that might be blocking
+    modal.removeAttribute("style");
     modal.classList.add("active");
-    modal.style.display = "flex";
+    modal.style.display = "flex !important";
+    modal.style.zIndex = "9999";
+    console.log("✅ Modal displayed, computed style:", window.getComputedStyle(modal).display);
+  } else {
+    console.error("❌ postModal element not found!");
+  }
+}
     console.log("✅ Modal displayed");
   } else {
     console.error("❌ postModal element not found!");
