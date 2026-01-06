@@ -68,116 +68,114 @@
   </head>
 
   <body>
-    <!-- Sticky header and search bar wrapper -->
-    <div id="stickyHeaderWrap">
-      <header role="banner" class="main-header">
-        <div class="container header-top">
-          <div
-            class="logo-section"
-            onclick="location.href='./index.html'"
-            role="button"
-            tabindex="0"
-            style="margin-right: 40px; cursor: pointer; margin-left: 48px"
-          >
-            <img
-              src="https://i.postimg.cc/59Ct5kvX/logo-cho-thue-cham-com.jpg"
-              alt="Logo ChoThuêNhà.com"
-              width="48"
-              height="48"
-            />
-            <h1 class="site-title">
-              <a
-                href="./index.html"
-                onclick="event.preventDefault(); location.href='./index.html';"
-                >CHO<span class="brand-highlight">THUÊ</span>.COM</a
-              >
-            </h1>
-          </div>
+    <header role="banner" class="main-header">
+      <div class="container header-top">
+        <div
+          class="logo-section"
+          onclick="location.href='./index.html'"
+          role="button"
+          tabindex="0"
+          style="margin-right: 40px; cursor: pointer; margin-left: 48px"
+        >
+          <img
+            src="https://i.postimg.cc/59Ct5kvX/logo-cho-thue-cham-com.jpg"
+            alt="Logo ChoThuêNhà.com"
+            width="48"
+            height="48"
+          />
+          <h1 class="site-title">
+            <a
+              href="./index.html"
+              onclick="event.preventDefault(); location.href='./index.html';"
+              >CHO<span class="brand-highlight">THUÊ</span>.COM</a
+            >
+          </h1>
+        </div>
 
-          <nav role="navigation" class="main-menu">
-            <div class="header-center">
-              <div class="dropdown model-dropdown">
-                <button class="dropdown-btn">
-                  Bạn đang cần thuê mô hình gì?
-                </button>
-                <div class="dropdown-content">
-                  <div class="dropdown-item" data-type="Nhà Đất cho thuê">
-                    Nhà Đất cho thuê
-                  </div>
-                  <div class="dropdown-item" data-type="Mặt bằng cho thuê">
-                    Mặt bằng cho thuê
-                  </div>
-                  <div class="dropdown-item" data-type="Sang nhượng mặt bằng">
-                    Sang nhượng mặt bằng
-                  </div>
+        <nav role="navigation" class="main-menu">
+          <div class="header-center">
+            <div class="dropdown model-dropdown">
+              <button class="dropdown-btn">
+                Bạn đang cần thuê mô hình gì?
+              </button>
+              <div class="dropdown-content">
+                <div class="dropdown-item" data-type="Nhà Đất cho thuê">
+                  Nhà Đất cho thuê
+                </div>
+                <div class="dropdown-item" data-type="Mặt bằng cho thuê">
+                  Mặt bằng cho thuê
+                </div>
+                <div class="dropdown-item" data-type="Sang nhượng mặt bằng">
+                  Sang nhượng mặt bằng
                 </div>
               </div>
             </div>
-          </nav>
+          </div>
+        </nav>
 
-          <div class="header-right">
-            <div class="contact-phone">
-              <i class="fas fa-phone-alt"></i>
-              <span>0344 886 556</span>
-            </div>
+        <div class="header-right">
+          <div class="contact-phone">
+            <i class="fas fa-phone-alt"></i>
+            <span>0344 886 556</span>
+          </div>
 
-            <div id="guestMenu" class="auth-links">
-              <button id="loginLink" class="link-btn auth-btn">
-                Đăng nhập
-              </button>
-              <button id="registerLink" class="link-btn auth-btn">
-                Đăng ký
-              </button>
-            </div>
-
-            <div id="userMenu" class="user-menu" style="display: none">
-              <button
-                class="link-btn auth-btn"
-                onclick="logout()"
-                style="background: #e74c3c"
-              >
-                Đăng xuất
-              </button>
-              <button class="user-toggle">
-                <span id="userName">Người dùng</span>
-                <i class="fas fa-chevron-down"></i>
-              </button>
-              <div class="user-dropdown" role="menu">
-                <a href="#" onclick="event.preventDefault(); logout();"
-                  ><i class="fas fa-sign-out-alt"></i> Đăng xuất</a
-                >
-                <a href="#"><i class="fas fa-user"></i> Thông tin cá nhân</a>
-                <a href="#"><i class="fas fa-list"></i> Tin đăng của tôi</a>
-              </div>
-            </div>
-
-            <button
-              id="postBtn"
-              class="post-btn"
-              onclick="openPostModal()"
-              style="display: none"
-            >
-              <i class="fas fa-plus"></i> Đăng tin
+          <div id="guestMenu" class="auth-links">
+            <button id="loginLink" class="link-btn auth-btn">
+              Đăng nhập
+            </button>
+            <button id="registerLink" class="link-btn auth-btn">
+              Đăng ký
             </button>
           </div>
+
+          <div id="userMenu" class="user-menu" style="display: none">
+            <button
+              class="link-btn auth-btn"
+              onclick="logout()"
+              style="background: #e74c3c"
+            >
+              Đăng xuất
+            </button>
+            <button class="user-toggle">
+              <span id="userName">Người dùng</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="user-dropdown" role="menu">
+              <a href="#" onclick="event.preventDefault(); logout();"
+                ><i class="fas fa-sign-out-alt"></i> Đăng xuất</a
+              >
+              <a href="#"><i class="fas fa-user"></i> Thông tin cá nhân</a>
+              <a href="#"><i class="fas fa-list"></i> Tin đăng của tôi</a>
+            </div>
+          </div>
+
+          <button
+            id="postBtn"
+            class="post-btn"
+            onclick="openPostModal()"
+            style="display: none"
+          >
+            <i class="fas fa-plus"></i> Đăng tin
+          </button>
         </div>
+      </div>
+    </header>
+    <section class="search-section" id="searchSection">
+      <div class="container">
+        <div class="search-wrapper">
+          <div class="search-type-selector">
+            <button class="search-type active">
+              <i class="fas fa-home"></i> Cho Thuê
+            </button>
+            <button class="search-type">
+              <i class="fas fa-exchange-alt"></i> Sang Nhượng
+            </button>
+          </div>
 
-        <div class="search-section" id="searchSection">
-          <div class="container">
-            <div class="search-wrapper">
-              <div class="search-type-selector">
-                <button class="search-type active">
-                  <i class="fas fa-home"></i> Cho Thuê
-                </button>
-                <button class="search-type">
-                  <i class="fas fa-exchange-alt"></i> Sang Nhượng
-                </button>
-              </div>
-
-              <div class="search-input-group">
-                <i class="fas fa-search"></i>
-                <input
-                  type="search"
+          <div class="search-input-group">
+            <i class="fas fa-search"></i>
+            <input
+              type="search"
                   id="search"
                   class="search-input"
                   placeholder="Tìm kiếm theo tên, địa điểm..."
