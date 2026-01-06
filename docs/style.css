@@ -1336,3 +1336,50 @@ textarea {
     font-size: 12px;
   }
 }
+
+/* Dropdown lọc mô hình ở header */
+.header-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+.model-dropdown {
+  position: relative;
+  z-index: 120;
+}
+.model-dropdown .dropdown-btn {
+  background: #fff;
+  color: #1322c6;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  font-size: 16px;
+}
+.model-dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: #fff;
+  min-width: 220px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  z-index: 200;
+}
+.model-dropdown:hover .dropdown-content,
+.model-dropdown:focus-within .dropdown-content {
+  display: block;
+}
+.model-dropdown .dropdown-item {
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 15px;
+}
+.model-dropdown .dropdown-item:hover {
+  background: #f0f4ff;
+}

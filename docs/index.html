@@ -93,31 +93,24 @@
         </div>
 
         <nav role="navigation" class="main-menu">
-          <div class="menu-item">
-            <button class="menu-toggle" aria-expanded="false">
-              Nhà Đất Cho Thuê <i class="fas fa-chevron-down"></i>
-            </button>
-            <div class="dropdown" role="menu">
-              <a href="#">Nhà nguyên căn</a>
-              <a href="#">Biệt thự</a>
-              <a href="#">Căn hộ dịch vụ</a>
-              <a href="#">Chung cư - Căn hộ</a>
-              <a href="#">Phòng trọ</a>
+          <div class="header-center">
+            <div class="dropdown model-dropdown">
+              <button class="dropdown-btn">
+                Bạn đang cần thuê mô hình gì?
+              </button>
+              <div class="dropdown-content">
+                <div class="dropdown-item" data-type="Nhà Đất cho thuê">
+                  Nhà Đất cho thuê
+                </div>
+                <div class="dropdown-item" data-type="Mặt bằng cho thuê">
+                  Mặt bằng cho thuê
+                </div>
+                <div class="dropdown-item" data-type="Sang nhượng mặt bằng">
+                  Sang nhượng mặt bằng
+                </div>
+              </div>
             </div>
           </div>
-
-          <div class="menu-item">
-            <button class="menu-toggle" aria-expanded="false">
-              Mặt Bằng Cho Thuê <i class="fas fa-chevron-down"></i>
-            </button>
-            <div class="dropdown" role="menu">
-              <a href="#">Mặt bằng kinh doanh</a>
-              <a href="#">Văn phòng</a>
-              <a href="#">Kho xưởng</a>
-            </div>
-          </div>
-
-          <a href="#" class="menu-item">Sang Nhượng</a>
         </nav>
 
         <div class="header-right">
@@ -567,6 +560,8 @@
             <label>Mô hình cho thuê</label>
             <select id="postRentalModel" required>
               <option value="">Chọn mô hình</option>
+              <option value="Nhà Đất cho thuê">Nhà Đất cho thuê</option>
+              <option value="Mặt bằng cho thuê">Mặt bằng cho thuê</option>
               <option value="Sang nhượng mặt bằng">Sang nhượng mặt bằng</option>
             </select>
           </div>

@@ -414,6 +414,31 @@ function filterByModel(model) {
   applyFilters(1);
 }
 
+// Dropdown lọc mô hình ở header
+document.querySelectorAll(".model-dropdown .dropdown-item").forEach((item) => {
+  item.addEventListener("click", function () {
+    const type = this.getAttribute("data-type");
+    filterByModel(type);
+  });
+});
+
+function filterByModel(model) {
+  // allPostsRaw là mảng chứa toàn bộ tin đăng đã fetch từ backend
+  let filtered = [];
+  if (model) {
+    filtered = allPostsRaw.filter(
+      (post) =>
+        post.modelType === model ||
+        post.model === model ||
+        post["mô hình"] === model
+    );
+  } else {
+    filtered = allPostsRaw;
+  }
+  // renderPosts là hàm hiển thị tin đăng, thay bằng hàm thực tế của bạn
+  renderPosts(filtered);
+}
+
 function renderPage() {
   const list = document.getElementById("roomList");
   if (!list) return;
