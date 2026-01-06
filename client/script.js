@@ -545,6 +545,10 @@ function showDetail(element) {
     rooms[
       Array.from(document.querySelectorAll(".listing-card")).indexOf(element)
     ];
+
+  // Debug: kiểm tra dữ liệu room
+  console.log("Room data:", room);
+
   const detailTitle = document.getElementById("detailTitle");
   const detailPrice = document.getElementById("detailPrice");
   const detailArea = document.getElementById("detailArea");
@@ -562,16 +566,30 @@ function showDetail(element) {
     detailLocation.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${room.location}`;
   if (detailTime)
     detailTime.innerHTML = `<i class="far fa-clock"></i> Cập nhật: ${room.time}`;
-  // Hiển thị ảnh đầu tiên từ images array hoặc img
+
+  // Hiển thị ảnh: ưu tiên images array, sau đó img, cuối cùng placeholder
   if (detailImg) {
-    if (room.images && room.images.length > 0) {
+    if (room.images && Array.isArray(room.images) && room.images.length > 0) {
+      console.log("Hiển thị ảnh từ images array:", room.images[0]);
       detailImg.src = room.images[0];
-    } else {
+    } else if (room.img) {
+      console.log("Hiển thị ảnh từ img:", room.img);
       detailImg.src = room.img;
+    } else {
+      console.log("Không có ảnh, dùng placeholder");
+      detailImg.src =
+        "https://via.placeholder.com/700x400?text=Kh%C3%B4ng+c%C3%B3+h%C3%ACnh+%E1%BA%A3nh";
     }
   }
-  if (detailDesc)
-    detailDesc.textContent = room.description || "Chưa có mô tả chi tiết";
+
+  // Hiển thị mô tả
+  if (detailDesc) {
+    const description =
+      room.description || room.desc || "Chưa có mô tả chi tiết";
+    console.log("Mô tả:", description);
+    detailDesc.textContent = description;
+  }
+
   if (detailModal) detailModal.style.display = "block";
 }
 
