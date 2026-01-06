@@ -889,19 +889,19 @@ document.addEventListener("DOMContentLoaded", function () {
   // build alphabet filter
   buildAlphabetBar();
 
-  // Sticky search-section hide on scroll down, show on scroll up
+  // Sticky header+search-section hide on scroll down, show on scroll up
   let lastScrollY2 = window.scrollY;
-  const searchSection = document.getElementById("searchSection");
-  function handleStickySearch() {
-    if (!searchSection) return;
+  const stickyHeaderWrap = document.getElementById("stickyHeaderWrap");
+  function handleStickyHeader() {
+    if (!stickyHeaderWrap) return;
     if (window.scrollY > lastScrollY2 && window.scrollY > 120) {
-      searchSection.classList.add("sticky-hide");
+      stickyHeaderWrap.classList.add("sticky-hide");
     } else {
-      searchSection.classList.remove("sticky-hide");
+      stickyHeaderWrap.classList.remove("sticky-hide");
     }
     lastScrollY2 = window.scrollY;
   }
-  window.addEventListener("scroll", handleStickySearch);
+  window.addEventListener("scroll", handleStickyHeader);
 
   // Category click filter logic
   document
