@@ -889,6 +889,44 @@ document.addEventListener("DOMContentLoaded", function () {
   // build alphabet filter
   buildAlphabetBar();
 
+  // Sticky search-section hide on scroll down, show on scroll up
+  let lastScrollY2 = window.scrollY;
+  const searchSection = document.getElementById("searchSection");
+  function handleStickySearch() {
+    if (!searchSection) return;
+    if (window.scrollY > lastScrollY2 && window.scrollY > 120) {
+      searchSection.classList.add("sticky-hide");
+    } else {
+      searchSection.classList.remove("sticky-hide");
+    }
+    lastScrollY2 = window.scrollY;
+  }
+  window.addEventListener("scroll", handleStickySearch);
+
+  // Category click filter logic
+  document.getElementById('cat-nhanguyencan')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    filterByModel('Nhà Đất cho thuê');
+  });
+  document.getElementById('cat-chungcu')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    // Lọc các tin có modelType chứa "chung cư" hoặc "căn hộ"
+    const filtered = allPostsRaw.filter(post => {
+      const m = (post.modelType || post.model || post["mô hình"] || "").toLowerCase();
+      return m.includes("chung cư") || m.includes("căn hộ");
+    });
+    renderPosts(filtered);
+  });
+  document.getElementById('cat-matbang')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    // Lọc các tin có modelType là "mặt bằng cho thuê" hoặc "sang nhượng mặt bằng"
+    const filtered = allPostsRaw.filter(post => {
+      const m = (post.modelType || post.model || post["mô hình"] || "").toLowerCase();
+      return m === "mặt bằng cho thuê" || m === "sang nhượng mặt bằng";
+    });
+    renderPosts(filtered);
+  });
+
   // Setup dropzone and file input for post images
   const dropZone = document.getElementById("dropZone");
   const fileInput = document.getElementById("postImages");
