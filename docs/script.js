@@ -207,6 +207,7 @@ function closeDetailModal() {
   if (modal) {
     modal.classList.remove("active");
     modal.style.display = "none";
+    document.body.style.overflow = "auto";
   }
 }
 
@@ -231,6 +232,10 @@ function openPostModal() {
   const modal = document.getElementById("postModal");
   console.log("📋 Modal element:", modal);
   if (modal) {
+    // Disable scroll body và scroll to top
+    document.body.style.overflow = "hidden";
+    window.scrollTo(0, 0);
+    
     modal.classList.add("active");
     modal.style.display = "flex";
     console.log("✅ Modal displayed");
@@ -609,6 +614,10 @@ function showDetail(element) {
   }
 
   if (detailModal) {
+    // Disable scroll body và scroll to top
+    document.body.style.overflow = "hidden";
+    window.scrollTo(0, 0);
+    
     detailModal.classList.add("active");
     detailModal.style.display = "flex";
   }
