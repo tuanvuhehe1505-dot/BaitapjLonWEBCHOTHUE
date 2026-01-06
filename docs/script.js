@@ -17,22 +17,14 @@ document.addEventListener("DOMContentLoaded", function () {
   // Ẩn/hiện header khi cuộn trên mobile
   let lastScrollY = window.scrollY;
   const searchSection = document.getElementById("searchSection");
-  const mainHeader = document.querySelector(".main-header");
   function handleScroll() {
-    const isMobile = window.innerWidth <= 768;
-    if (!isMobile) {
-      if (searchSection) searchSection.classList.remove("hide-on-scroll");
-      if (mainHeader) mainHeader.classList.remove("hide-on-scroll");
-      return;
-    }
+    if (!searchSection) return;
     if (window.scrollY > lastScrollY && window.scrollY > 80) {
-      // Cuộn xuống, ẩn header
-      if (mainHeader) mainHeader.classList.add("hide-on-scroll");
-      if (searchSection) searchSection.classList.add("hide-on-scroll");
-    } else {
-      // Cuộn lên, hiện header
-      if (mainHeader) mainHeader.classList.remove("hide-on-scroll");
-      if (searchSection) searchSection.classList.remove("hide-on-scroll");
+      // Cuộn xuống, ẩn search-section
+      searchSection.classList.add("hide-on-scroll");
+    } else if (window.scrollY < lastScrollY) {
+      // Cuộn lên, hiện search-section ngay lập tức
+      searchSection.classList.remove("hide-on-scroll");
     }
     lastScrollY = window.scrollY;
   }
