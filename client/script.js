@@ -628,7 +628,6 @@ function showDetail(element) {
 
   if (detailModal) {
     detailModal.classList.add("active");
-    detailModal.style.display = "flex";
   }
 }
 
