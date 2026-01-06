@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng tin cho thuê - ChoThue.com</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+        padding: 30px 0;
+      }
+      .post-container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      }
+      .post-header {
+        background: #053beb;
+        color: white;
+        padding: 25px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        position: relative;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .post-header-title {
+        font-size: 27px;
+        text-align: center;
+        line-height: 1.3;
+        padding: 0 80px;
+      }
+      .post-header-title span {
+        font-size: 19px;
+      }
+      .close-btn {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 36px;
+        cursor: pointer;
+        width: 56px;
+        height: 56px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+      }
+      .post-body {
+        padding: 40px;
+      }
+      .form-group {
+        margin-bottom: 25px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #333;
+      }
+      .form-group label span {
+        color: red;
+      }
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 14px;
+        border: 2px solid #ddd;
+        border-radius: 12px;
+        font-size: 16px;
+        box-sizing: border-box;
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .post-btn {
+        background: #e74c3c;
+        color: white;
+        padding: 18px 60px;
+        border: none;
+        border-radius: 50px;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+      }
+      .post-btn:hover {
+        background: #c0392b;
+      }
+      .post-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+      .error {
+        color: #e74c3c;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+      .success {
+        color: #27ae60;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+      .loading {
+        display: none;
+        text-align: center;
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="post-container">
+      <div class="post-header">
+        <div class="post-header-title">
+          ĐĂNG TIN CHO THUÊ<br />
+          <span>NHÀ / MẶT BẰNG / PHÒNG TRỌ</span>
+        </div>
+        <span class="close-btn" onclick="goBack()">×</span>
+      </div>
+
+      <div class="post-body">
+        <form id="postForm">
+          <!-- Loại chuyên mục -->
+          <div class="form-group">
+            <label>Loại chuyên mục <span>*</span></label>
+            <select id="categoryType" required>
+              <option value="">-- Chọn loại chuyên mục --</option>
+              <option value="Phòng trọ, nhà trọ">Phòng trọ, nhà trọ</option>
+              <option value="Nhà nguyên căn">Nhà nguyên căn</option>
+              <option value="Chung cư, căn hộ">Chung cư, căn hộ</option>
+              <option value="Mặt bằng, văn phòng">Mặt bằng, văn phòng</option>
+              <option value="Kho xưởng">Kho xưởng</option>
+            </select>
+          </div>
+
+          <!-- Địa chỉ cụ thể -->
+          <div class="form-group">
+            <label>Địa chỉ cụ thể <span>*</span></label>
+            <input
+              type="text"
+              id="address"
+              placeholder="Ví dụ: 123 Nguyễn Trãi, Phường Bến Thành, Quận 1, TP.HCM"
+              required
+            />
+            <div class="error" id="addressError"></div>
+          </div>
+
+          <!-- Liên hệ chính chủ -->
+          <div class="form-group">
+            <label>Liên hệ chính chủ <span>*</span></label>
+            <input
+              type="text"
+              id="contact"
+              placeholder="Ví dụ: Anh Đạt - 0769969928 (có Zalo)"
+              required
+            />
+            <div class="error" id="contactError"></div>
+          </div>
+
+          <!-- Mức giá -->
+          <div class="form-group">
+            <label>Mức giá (triệu/tháng) <span>*</span></label>
+            <input
+              type="number"
+              id="price"
+              placeholder="Ví dụ: 15"
+              min="0"
+              required
+            />
+            <div class="error" id="priceError"></div>
+          </div>
+
+          <!-- Diện tích -->
+          <div class="form-group">
+            <label>Diện tích (m²)</label>
+            <input type="number" id="area" placeholder="Ví dụ: 80" min="0" />
+          </div>
+
+          <!-- Mô tả chi tiết -->
+          <div class="form-group">
+            <label>Thông tin mô tả <span>*</span></label>
+            <textarea
+              id="description"
+              placeholder="Mô tả chi tiết về nhà, tiện ích, nội thất..."
+              required
+              rows="6"
+            ></textarea>
+            <div class="error" id="descriptionError"></div>
+          </div>
+
+          <!-- Ảnh -->
+          <div class="form-group">
+            <label>Ảnh (tối đa 10 ảnh)</label>
+            <input type="file" id="images" multiple accept="image/*" />
+            <div class="error" id="imagesError"></div>
+            <div
+              id="imagePreview"
+              style="
+                margin-top: 15px;
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+              "
+            ></div>
+          </div>
+
+          <div class="loading" id="loading">
+            <i class="fas fa-spinner fa-spin"></i> Đang xử lý...
+          </div>
+
+          <div style="text-align: center; margin-top: 50px">
+            <button type="submit" class="post-btn" id="submitBtn">
+              ĐĂNG TIN NGAY
+            </button>
+            <div class="error" id="formError" style="margin-top: 15px"></div>
+            <div
+              class="success"
+              id="formSuccess"
+              style="margin-top: 15px"
+            ></div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+      // 📋 KIỂM TRA ĐĂNG NHẬP TRƯỚC KHI VÀO TRANG
+      window.addEventListener("load", function () {
+        const user = localStorage.getItem("user");
+        const token = localStorage.getItem("token");
+
+        if (!user || !token) {
+          alert("❌ Bạn cần đăng nhập trước khi đăng tin!");
+          window.location.href = "index.html";
+          return;
+        }
+
+        updateUserMenu();
+      });
+
+      // 🔄 CẬP NHẬT MENU NGƯỜI DÙNG
+      function updateUserMenu() {
+        const user = localStorage.getItem("user");
+        const guestMenu = document.getElementById("guestMenu");
+        const userMenu = document.getElementById("userMenu");
+        const userNameEl = document.getElementById("userName");
+
+        if (user && userNameEl && userMenu && guestMenu) {
+          const parsed = JSON.parse(user);
+          guestMenu.style.display = "none";
+          userMenu.style.display = "block";
+          userNameEl.innerHTML = `${
+            parsed.name || parsed.phone
+          } <i class="fas fa-caret-down"></i>`;
+        }
+      }
+
+      // 📸 XỬ LÝ XEM TRƯỚC HÌNH ẢNH
+      document
+        .getElementById("images")
+        .addEventListener("change", function (e) {
+          const preview = document.getElementById("imagePreview");
+          preview.innerHTML = "";
+
+          if (this.files.length > 10) {
+            document.getElementById("imagesError").textContent =
+              "❌ Tối đa 10 ảnh";
+            return;
+          }
+
+          document.getElementById("imagesError").textContent = "";
+
+          Array.from(this.files).forEach((file, idx) => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              const img = document.createElement("img");
+              img.src = e.target.result;
+              img.style.width = "80px";
+              img.style.height = "80px";
+              img.style.objectFit = "cover";
+              img.style.borderRadius = "8px";
+              preview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+          });
+        });
+
+      // 📤 GỬI FORM ĐẾN API
+      document
+        .getElementById("postForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          // 🔐 Lấy token từ localStorage
+          const token = localStorage.getItem("token");
+          if (!token) {
+            document.getElementById("formError").textContent =
+              "❌ Token không hợp lệ, vui lòng đăng nhập lại";
+            return;
+          }
+
+          // 📋 KIỂM VALIDATE DỮ LIỆU
+          const categoryType = document.getElementById("categoryType").value;
+          const address = document.getElementById("address").value.trim();
+          const contact = document.getElementById("contact").value.trim();
+          const price = document.getElementById("price").value;
+          const description = document
+            .getElementById("description")
+            .value.trim();
+
+          document.getElementById("formError").textContent = "";
+          document.getElementById("addressError").textContent = "";
+          document.getElementById("contactError").textContent = "";
+          document.getElementById("priceError").textContent = "";
+          document.getElementById("descriptionError").textContent = "";
+
+          let hasError = false;
+
+          if (!categoryType) {
+            document.getElementById("formError").textContent =
+              "❌ Vui lòng chọn loại chuyên mục";
+            hasError = true;
+          }
+          if (!address) {
+            document.getElementById("addressError").textContent =
+              "❌ Địa chỉ không được trống";
+            hasError = true;
+          }
+          if (!contact) {
+            document.getElementById("contactError").textContent =
+              "❌ Thông tin liên hệ không được trống";
+            hasError = true;
+          }
+          if (!price || price <= 0) {
+            document.getElementById("priceError").textContent =
+              "❌ Giá phải lớn hơn 0";
+            hasError = true;
+          }
+          if (!description) {
+            document.getElementById("descriptionError").textContent =
+              "❌ Mô tả không được trống";
+            hasError = true;
+          }
+
+          if (hasError) return;
+
+          // 🔄 CHUẨN BỊ DỮ LIỆU
+          const formData = new FormData();
+          formData.append("category", categoryType);
+          formData.append("address", address);
+          formData.append("contact", contact);
+          formData.append("price", parseFloat(price));
+          formData.append("area", document.getElementById("area").value || 0);
+          formData.append("description", description);
+          formData.append("title", `${categoryType} tại ${address}`); // Tạo tiêu đề tự động
+
+          // Thêm ảnh nếu có
+          const files = document.getElementById("images").files;
+          for (let i = 0; i < files.length; i++) {
+            formData.append("images", files[i]);
+          }
+
+          // 🚀 GỬI REQUEST ĐẾN API
+          document.getElementById("submitBtn").disabled = true;
+          document.getElementById("loading").style.display = "block";
+
+          try {
+            const response = await fetch("http://localhost:5000/api/posts", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              body: formData,
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              document.getElementById("formSuccess").textContent =
+                "✅ Đăng tin thành công! Sẽ quay về trang chủ...";
+              setTimeout(() => {
+                window.location.href = "index.html";
+              }, 2000);
+            } else {
+              document.getElementById("formError").textContent = `❌ Lỗi: ${
+                data.message || "Không thể đăng tin"
+              }`;
+            }
+          } catch (error) {
+            document.getElementById(
+              "formError"
+            ).textContent = `❌ Lỗi: ${error.message}`;
+          } finally {
+            document.getElementById("submitBtn").disabled = false;
+            document.getElementById("loading").style.display = "none";
+          }
+        });
+
+      // 🔙 QUAY LẠI TRANG TRƯỚC
+      function goBack() {
+        if (
+          document.referrer.includes("index.html") ||
+          document.referrer === ""
+        ) {
+          window.history.back();
+        } else {
+          window.location.href = "index.html";
+        }
+      }
+    </script>
+  </body>
+</html>

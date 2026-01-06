@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
+    />
+    <meta
+      name="description"
+      content="Tìm nhà cho thuê, mặt bằng kinh doanh, căn hộ chính chủ ở Hà Nội. Tin tức thật, giá thật, hình ảnh thật. Đã kiểm duyệt và công bố."
+    />
+    <meta
+      name="keywords"
+      content="cho thuê nhà, cho thuê mặt bằng, cho thuê căn hộ, cho thuê phòng trọ, sang nhượng, Hà Nội"
+    />
+    <meta name="author" content="ChoThuêNhà.com" />
+    <meta name="theme-color" content="#1322C6" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="ChoThuêNhà.com - Nhà đất cho thuê chính chủ tại Hà Nội"
+    />
+    <meta
+      property="og:description"
+      content="Tìm kiếm nhà cho thuê, mặt bằng kinh doanh, căn hộ chất lượng cao với giá tốt nhất"
+    />
+    <meta property="og:url" content="https://chothue.com" />
+    <meta
+      property="og:image"
+      content="https://i.postimg.cc/59Ct5kvX/logo-cho-thue-cham-com.jpg"
+    />
+    <link rel="canonical" href="https://chothue.com/" />
+    <title>
+      ChoThuêNhà.com - Nhà Đất Cho Thuê Chính Chủ Tại Hà Nội | Căn Hộ, Mặt Bằng,
+      Phòng Trọ
+    </title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      type="image/jpeg"
+      href="https://i.postimg.cc/59Ct5kvX/logo-cho-thue-cham-com.jpg"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "ChoThuêNhà.com",
+        "image": "https://i.postimg.cc/59Ct5kvX/logo-cho-thue-cham-com.jpg",
+        "description": "Platform cho thuê nhà, mặt bằng kinh doanh, căn hộ chính chủ tại Hà Nội",
+        "telephone": "+84344886556",
+        "url": "https://chothue.com"
+      }
+    </script>
+  </head>
+
+  <body>
+    <header role="banner" class="main-header">
+      <div class="container header-top">
+        <div
+          class="logo-section"
+          onclick="location.href='./index.html'"
+          role="button"
+          tabindex="0"
+          style="margin-right: 40px; cursor: pointer"
+        >
+          <img
+            src="https://i.postimg.cc/59Ct5kvX/logo-cho-thue-cham-com.jpg"
+            alt="Logo ChoThuêNhà.com"
+            width="48"
+            height="48"
+          />
+          <h1 class="site-title">
+            <a
+              href="./index.html"
+              onclick="event.preventDefault(); location.href='./index.html';"
+              >CHO<span class="brand-highlight">THUÊ</span>.COM</a
+            >
+          </h1>
+        </div>
+
+        <nav role="navigation" class="main-menu">
+          <div class="menu-item">
+            <button class="menu-toggle" aria-expanded="false">
+              Nhà Đất Cho Thuê <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="dropdown" role="menu">
+              <a href="#">Nhà nguyên căn</a>
+              <a href="#">Biệt thự</a>
+              <a href="#">Căn hộ dịch vụ</a>
+              <a href="#">Chung cư - Căn hộ</a>
+              <a href="#">Phòng trọ</a>
+            </div>
+          </div>
+
+          <div class="menu-item">
+            <button class="menu-toggle" aria-expanded="false">
+              Mặt Bằng Cho Thuê <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="dropdown" role="menu">
+              <a href="#">Mặt bằng kinh doanh</a>
+              <a href="#">Văn phòng</a>
+              <a href="#">Kho xưởng</a>
+            </div>
+          </div>
+
+          <a href="#" class="menu-item">Sang Nhượng</a>
+        </nav>
+
+        <div class="header-right">
+          <div class="contact-phone">
+            <i class="fas fa-phone-alt"></i>
+            <span>0344 886 556</span>
+          </div>
+
+          <div id="guestMenu" class="auth-links">
+            <button id="loginLink" class="link-btn auth-btn">Đăng nhập</button>
+            <button id="registerLink" class="link-btn auth-btn">Đăng ký</button>
+          </div>
+
+          <div id="userMenu" class="user-menu" style="display: none">
+            <button
+              class="link-btn auth-btn"
+              onclick="logout()"
+              style="background: #e74c3c"
+            >
+              Đăng xuất
+            </button>
+            <button class="user-toggle">
+              <span id="userName">Người dùng</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="user-dropdown" role="menu">
+              <a href="#" onclick="event.preventDefault(); logout();"
+                ><i class="fas fa-sign-out-alt"></i> Đăng xuất</a
+              >
+              <a href="#"><i class="fas fa-user"></i> Thông tin cá nhân</a>
+              <a href="#"><i class="fas fa-list"></i> Tin đăng của tôi</a>
+            </div>
+          </div>
+
+          <button
+            id="postBtn"
+            class="post-btn"
+            onclick="openPostModal()"
+            style="display: none"
+          >
+            <i class="fas fa-plus"></i> Đăng tin
+          </button>
+        </div>
+      </div>
+
+      <div class="search-section" id="searchSection">
+        <div class="container">
+          <div class="search-wrapper">
+            <div class="search-type-selector">
+              <button class="search-type active">
+                <i class="fas fa-home"></i> Cho Thuê
+              </button>
+              <button class="search-type">
+                <i class="fas fa-exchange-alt"></i> Sang Nhượng
+              </button>
+            </div>
+
+            <div class="search-input-group">
+              <i class="fas fa-search"></i>
+              <input
+                type="search"
+                id="search"
+                class="search-input"
+                placeholder="Tìm kiếm theo tên, địa điểm..."
+              />
+            </div>
+
+            <div class="filter-group">
+              <select id="modelFilter" class="filter-select">
+                <option value="">Tất cả mô hình</option>
+                <option value="Nhà Đất cho thuê">Nhà Đất cho thuê</option>
+                <option value="Mặt bằng cho thuê">Mặt bằng cho thuê</option>
+              </select>
+
+              <select id="districtFilter" class="filter-select">
+                <option value="">Quận/Huyện</option>
+                <optgroup label="Quận nội thành">
+                  <option value="Ba Đình">Ba Đình</option>
+                  <option value="Hoàn Kiếm">Hoàn Kiếm</option>
+                  <option value="Đống Đa">Đống Đa</option>
+                  <option value="Hai Bà Trưng">Hai Bà Trưng</option>
+                  <option value="Hoàng Mai">Hoàng Mai</option>
+                  <option value="Thanh Xuân">Thanh Xuân</option>
+                  <option value="Tây Hồ">Tây Hồ</option>
+                  <option value="Cầu Giấy">Cầu Giấy</option>
+                  <option value="Long Biên">Long Biên</option>
+                  <option value="Bắc Từ Liêm">Bắc Từ Liêm</option>
+                  <option value="Nam Từ Liêm">Nam Từ Liêm</option>
+                </optgroup>
+                <optgroup label="Huyện ngoại thành">
+                  <option value="Hoài Đức">Hoài Đức</option>
+                  <option value="Thanh Trì">Thanh Trì</option>
+                  <option value="Sơn Tây">Sơn Tây</option>
+                  <option value="Chương Mỹ">Chương Mỹ</option>
+                  <option value="Mê Linh">Mê Linh</option>
+                  <option value="Quốc Oai">Quốc Oai</option>
+                  <option value="Thạch Thất">Thạch Thất</option>
+                  <option value="Phúc Thọ">Phúc Thọ</option>
+                </optgroup>
+              </select>
+
+              <select id="priceFilter" class="filter-select">
+                <option value="">Mức giá</option>
+                <option value="lt5">Dưới 5 triệu</option>
+                <option value="lt10">Dưới 10 triệu</option>
+                <option value="lt30">Dưới 30 triệu</option>
+                <option value="lt50">Dưới 50 triệu</option>
+                <option value="gt100">Trên 100 triệu</option>
+              </select>
+
+              <button class="search-btn" onclick="applyFilters()">
+                <i class="fas fa-search"></i> Tìm
+              </button>
+              <button class="reset-btn" onclick="resetFilters()">
+                <i class="fas fa-redo"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">Tìm Nhà Cho Thuê Nhanh Chóng & Dễ Dàng</h1>
+          <p class="hero-subtitle">
+            Kho tin chính chủ, giá tốt, hình ảnh thật - Đã được kiểm duyệt bởi
+            đội ngũ chuyên gia
+          </p>
+          <div class="hero-features">
+            <div class="feature-item">
+              <i class="fas fa-check-circle"></i>
+              <span>10,000+ tin thật hàng ngày</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-check-circle"></i>
+              <span>Giá cả cạnh tranh & minh bạch</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-check-circle"></i>
+              <span>Hỗ trợ 24/7 từ chuyên gia</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="category-section">
+      <div class="container">
+        <h2 class="section-title">Danh Mục Phổ Biến</h2>
+        <div class="category-grid">
+          <article class="category-card">
+            <div class="category-icon"><i class="fas fa-home"></i></div>
+            <h3>Nhà Nguyên Căn</h3>
+            <p>Nhà riêng biệt, độc lập, an toàn</p>
+            <a href="#" class="category-link"
+              >Xem 234 tin <i class="fas fa-arrow-right"></i
+            ></a>
+          </article>
+
+          <article class="category-card">
+            <div class="category-icon"><i class="fas fa-building"></i></div>
+            <h3>Chung Cư - Căn Hộ</h3>
+            <p>Tiện ích đầy đủ, vị trí trung tâm</p>
+            <a href="#" class="category-link"
+              >Xem 567 tin <i class="fas fa-arrow-right"></i
+            ></a>
+          </article>
+
+          <article class="category-card">
+            <div class="category-icon"><i class="fas fa-door-open"></i></div>
+            <h3>Phòng Trọ</h3>
+            <p>Giá rẻ, tiện lợi cho thuê ngắn hạn</p>
+            <a href="#" class="category-link"
+              >Xem 890 tin <i class="fas fa-arrow-right"></i
+            ></a>
+          </article>
+
+          <article class="category-card">
+            <div class="category-icon"><i class="fas fa-store"></i></div>
+            <h3>Mặt Bằng Kinh Doanh</h3>
+            <p>Vị trí kinh doanh, phù hợp mở shop</p>
+            <a href="#" class="category-link"
+              >Xem 345 tin <i class="fas fa-arrow-right"></i
+            ></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="listings-section">
+      <div class="container">
+        <div class="listings-header">
+          <h2 class="section-title">Tin Đăng Mới Nhất</h2>
+          <div class="sort-controls">
+            <button class="sort-btn active">
+              <i class="fas fa-clock"></i> Mới nhất
+            </button>
+            <button class="sort-btn">
+              <i class="fas fa-arrow-up"></i> Giá thấp
+            </button>
+            <button class="sort-btn">
+              <i class="fas fa-arrow-down"></i> Giá cao
+            </button>
+          </div>
+        </div>
+
+        <div id="roomList" class="listing-grid" role="main"></div>
+
+        <div class="pagination">
+          <button class="page-btn prev">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <div class="page-numbers"></div>
+          <button class="page-btn next">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="benefits-section">
+      <div class="container">
+        <h2 class="section-title">Tại Sao Chọn Chúng Tôi?</h2>
+        <div class="benefits-grid">
+          <article class="benefit-card">
+            <div class="benefit-icon"><i class="fas fa-shield-alt"></i></div>
+            <h3>An Toàn & Bảo Mật</h3>
+            <p>Tất cả tin đăng được kiểm duyệt kỹ lưỡng trước khi công bố</p>
+          </article>
+
+          <article class="benefit-card">
+            <div class="benefit-icon"><i class="fas fa-bolt"></i></div>
+            <h3>Nhanh Chóng</h3>
+            <p>Tìm kiếm và liên hệ chỉ trong vài giây, không phức tạp</p>
+          </article>
+
+          <article class="benefit-card">
+            <div class="benefit-icon"><i class="fas fa-coins"></i></div>
+            <h3>Giá Tốt</h3>
+            <p>Giá cạnh tranh, không phí ẩn, giá gì là giá đó</p>
+          </article>
+
+          <article class="benefit-card">
+            <div class="benefit-icon"><i class="fas fa-users"></i></div>
+            <h3>Hỗ Trợ Tận Tình</h3>
+            <p>Đội ngũ chuyên gia sẵn sàng hỗ trợ 24/7</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <footer role="contentinfo" class="main-footer">
+      <div class="container">
+        <div class="footer-content">
+          <article class="footer-section">
+            <h3>Về Chúng Tôi</h3>
+            <p>
+              ChoThuêNhà.com - Nền tảng cho thuê nhà, mặt bằng kinh doanh hàng
+              đầu tại Hà Nội
+            </p>
+          </article>
+
+          <article class="footer-section">
+            <h3>Danh Mục</h3>
+            <ul>
+              <li><a href="#">Nhà Nguyên Căn</a></li>
+              <li><a href="#">Chung Cư</a></li>
+              <li><a href="#">Phòng Trọ</a></li>
+              <li><a href="#">Mặt Bằng</a></li>
+            </ul>
+          </article>
+
+          <article class="footer-section">
+            <h3>Hỗ Trợ</h3>
+            <ul>
+              <li><a href="#">Hướng Dẫn</a></li>
+              <li><a href="#">Điều Khoản Sử Dụng</a></li>
+              <li><a href="#">Chính Sách Bảo Mật</a></li>
+              <li><a href="#">Liên Hệ</a></li>
+            </ul>
+          </article>
+
+          <article class="footer-section">
+            <h3>Liên Hệ</h3>
+            <p><i class="fas fa-phone"></i> 0344 886 556</p>
+            <p><i class="fas fa-envelope"></i> chothuechamcom@gmail.com</p>
+            <p><i class="fas fa-map-marker-alt"></i> 55 Giải Phóng, Hà Nội</p>
+          </article>
+        </div>
+
+        <div class="footer-bottom">
+          <p>&copy; 2025 ChoThueChamCom. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <div id="authModal" class="modal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeAuthModal()">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-tabs">
+          <button id="tabLogin" class="modal-tab active" data-tab="login">
+            Đăng Nhập
+          </button>
+          <button id="tabRegister" class="modal-tab" data-tab="register">
+            Đăng Ký
+          </button>
+          <button id="tabForgot" class="modal-tab" data-tab="forgot">
+            Quên Mật Khẩu
+          </button>
+        </div>
+
+        <form id="loginForm" class="modal-form active">
+          <h2>Đăng Nhập</h2>
+          <div id="loginError" class="form-error"></div>
+          <div class="form-group">
+            <label>Số Điện Thoại</label>
+            <input type="tel" id="loginPhone" placeholder="0XXXXXXXXX" />
+          </div>
+          <div class="form-group">
+            <label>Mật Khẩu</label>
+            <input type="password" id="loginPass" placeholder="Nhập mật khẩu" />
+          </div>
+          <button type="button" class="btn-primary btn-block" onclick="login()">
+            Đăng Nhập
+          </button>
+        </form>
+
+        <form id="registerForm" class="modal-form">
+          <h2>Đăng Ký</h2>
+          <div id="registerError" class="form-error"></div>
+          <div class="form-group">
+            <label>Họ và Tên</label>
+            <input type="text" id="regName" />
+          </div>
+          <div class="form-group">
+            <label>Số Điện Thoại</label>
+            <input type="tel" id="regPhone" />
+          </div>
+          <div class="form-group">
+            <label>Mật Khẩu</label>
+            <input type="password" id="regPass" />
+          </div>
+          <button
+            type="button"
+            class="btn-primary btn-block"
+            onclick="register()"
+          >
+            Đăng Ký
+          </button>
+        </form>
+
+        <form id="forgotForm" class="modal-form">
+          <h2>Quên Mật Khẩu</h2>
+          <div class="form-group">
+            <label>Số Điện Thoại</label>
+            <input type="tel" id="forgotPhone" />
+          </div>
+          <button
+            type="button"
+            class="btn-primary btn-block"
+            onclick="requestOTP()"
+          >
+            Gửi OTP
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div id="detailModal" class="modal">
+      <div class="modal-content modal-large">
+        <button class="modal-close" onclick="closeDetailModal()">
+          <i class="fas fa-times"></i>
+        </button>
+        <img id="detailImg" src="" alt="Detail image" class="detail-image" />
+        <div class="detail-content">
+          <h1 id="detailTitle">Tiêu đề</h1>
+          <div class="detail-price">
+            <span id="detailPrice">Giá</span>
+            <span id="detailArea">Diện tích</span>
+          </div>
+          <div class="detail-info">
+            <span id="detailLocation"
+              ><i class="fas fa-map-marker-alt"></i> Địa điểm</span
+            >
+            <span id="detailTime"><i class="fas fa-clock"></i> Thời gian</span>
+          </div>
+          <div class="contact-section">
+            <h3>Liên hệ: <span id="detailPhone">0344886556</span></h3>
+            <button class="btn-call" onclick="callPhone()">GỌI NGAY</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="postModal" class="modal">
+      <div class="modal-content modal-large">
+        <button class="modal-close" onclick="closePostModal()">
+          <i class="fas fa-times"></i>
+        </button>
+        <h2 class="modal-title">ĐĂNG TIN CHO THUÊ</h2>
+        <form id="postForm" class="post-form">
+          <div class="form-group">
+            <label>Tiêu đề</label>
+            <input type="text" id="postTitle" />
+          </div>
+          <div class="form-group">
+            <label>Quận/Huyện</label>
+            <select id="postDistrict" required>
+              <option value="">Chọn quận/huyện</option>
+              <optgroup label="Quận nội thành">
+                <option value="Ba Đình">Ba Đình</option>
+                <option value="Hoàn Kiếm">Hoàn Kiếm</option>
+                <option value="Đống Đa">Đống Đa</option>
+                <option value="Hai Bà Trưng">Hai Bà Trưng</option>
+                <option value="Hoàng Mai">Hoàng Mai</option>
+                <option value="Thanh Xuân">Thanh Xuân</option>
+                <option value="Tây Hồ">Tây Hồ</option>
+                <option value="Cầu Giấy">Cầu Giấy</option>
+                <option value="Long Biên">Long Biên</option>
+                <option value="Bắc Từ Liêm">Bắc Từ Liêm</option>
+                <option value="Nam Từ Liêm">Nam Từ Liêm</option>
+              </optgroup>
+              <optgroup label="Huyện ngoại thành">
+                <option value="Hoài Đức">Hoài Đức</option>
+                <option value="Thanh Trì">Thanh Trì</option>
+                <option value="Sơn Tây">Sơn Tây</option>
+                <option value="Chương Mỹ">Chương Mỹ</option>
+                <option value="Mê Linh">Mê Linh</option>
+                <option value="Quốc Oai">Quốc Oai</option>
+                <option value="Thạch Thất">Thạch Thất</option>
+                <option value="Phúc Thọ">Phúc Thọ</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Mô hình cho thuê</label>
+            <select id="postRentalModel" required>
+              <option value="">Chọn mô hình</option>
+              <option value="Nhà Đất cho thuê">Nhà Đất cho thuê</option>
+              <option value="Mặt bằng cho thuê">Mặt bằng cho thuê</option>
+              <option value="Sang nhượng mặt bằng">Sang nhượng mặt bằng</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Địa chỉ chi tiết</label>
+            <input
+              type="text"
+              id="postAddress"
+              placeholder="Số nhà, đường..."
+            />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Giá (triệu/tháng)</label>
+              <input type="number" id="postPrice" />
+            </div>
+            <div class="form-group">
+              <label>Diện tích (m²)</label>
+              <input type="number" id="postArea" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Mô tả</label>
+            <textarea
+              id="postDesc"
+              rows="6"
+              placeholder="Mô tả chi tiết về nhà, tiện ích, liên hệ..."
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label
+              >Hình ảnh
+              <small
+                style="
+                  color: var(--text-gray);
+                  margin-left: 8px;
+                  font-weight: 600;
+                "
+                >Số ảnh: <span id="imageCount">0</span></small
+              ></label
+            >
+            <div id="dropZone" class="dropzone">
+              <i
+                class="fas fa-cloud-upload-alt"
+                style="
+                  font-size: 28px;
+                  color: #999;
+                  display: block;
+                  margin-bottom: 8px;
+                "
+              ></i>
+              Kéo thả ảnh vào đây hoặc
+              <button
+                type="button"
+                onclick="document.getElementById('postImages').click()"
+                class="btn-link"
+              >
+                chọn ảnh
+              </button>
+            </div>
+            <input
+              type="file"
+              id="postImages"
+              multiple
+              accept="image/*"
+              style="display: none"
+            />
+            <div id="imagePreview" class="image-previews"></div>
+          </div>
+
+          <button
+            type="button"
+            class="btn-primary btn-block"
+            onclick="submitPost()"
+            style="padding: 14px; font-size: 16px; margin-top: 12px"
+          >
+            ĐĂNG TIN NGAY
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
