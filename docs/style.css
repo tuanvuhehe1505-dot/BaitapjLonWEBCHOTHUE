@@ -85,10 +85,15 @@ textarea {
   box-shadow: 0 4px 16px rgba(19, 34, 198, 0.1);
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 2000;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(6px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.main-header.hide-on-scroll {
+  transform: none !important;
+}
 }
 
 .main-header:hover {
