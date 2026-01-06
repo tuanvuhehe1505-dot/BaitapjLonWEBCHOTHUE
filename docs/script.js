@@ -231,16 +231,8 @@ function openPostModal() {
   const modal = document.getElementById("postModal");
   console.log("📋 Modal element:", modal);
   if (modal) {
-    // Force remove any inline styles that might be blocking
-    modal.removeAttribute("style");
     modal.classList.add("active");
-    modal.style.display = "flex !important";
-    modal.style.zIndex = "9999";
-    console.log("✅ Modal displayed, computed style:", window.getComputedStyle(modal).display);
-  } else {
-    console.error("❌ postModal element not found!");
-  }
-}
+    modal.style.display = "flex";
     console.log("✅ Modal displayed");
   } else {
     console.error("❌ postModal element not found!");
@@ -616,7 +608,10 @@ function showDetail(element) {
     detailDesc.textContent = description;
   }
 
-  if (detailModal) detailModal.style.display = "block";
+  if (detailModal) {
+    detailModal.classList.add("active");
+    detailModal.style.display = "flex";
+  }
 }
 
 // ======================= HÀM ĐĂNG KÝ =======================
