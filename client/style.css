@@ -393,12 +393,20 @@ textarea {
   background: var(--bg-light);
   padding: 20px 0;
   border-top: 1px solid var(--border-color);
-  position: sticky;
-  top: 0;
+  position: static;
+  top: unset;
   z-index: 999;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
   transform: translateY(0);
   opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .search-section {
+    position: sticky;
+    top: 0;
+  }
+}
 }
 
 .search-section.sticky-hide {

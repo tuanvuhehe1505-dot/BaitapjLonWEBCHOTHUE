@@ -82,7 +82,7 @@ textarea {
 /* ==================== HEADER ==================== */
 .main-header {
   background: linear-gradient(135deg, var(--primary-color) 0%, #0d1ba8 100%);
-  box-shadow: 0 4px 16px rgba(19, 34, 198, 0.10);
+  box-shadow: 0 4px 16px rgba(19, 34, 198, 0.1);
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -392,24 +392,18 @@ textarea {
   background: var(--bg-light);
   padding: 20px 0;
   border-top: 1px solid var(--border-color);
-  position: sticky;
-  top: 0;
+  position: static;
+  top: unset;
   z-index: 999;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
   transform: translateY(0);
   opacity: 1;
 }
 
-.search-section.sticky-hide {
-  transform: translateY(-100%);
-  opacity: 0;
-}
-
 @media (max-width: 768px) {
-  .search-section.hide-on-scroll {
-    transform: translateY(-100%);
-    opacity: 0;
-    pointer-events: none;
+  .search-section {
+    position: sticky;
+    top: 0;
   }
 }
 
