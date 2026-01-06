@@ -235,7 +235,7 @@ function openPostModal() {
     // Disable scroll body và scroll to top
     document.body.style.overflow = "hidden";
     window.scrollTo(0, 0);
-    
+
     modal.classList.add("active");
     modal.style.display = "flex";
     console.log("✅ Modal displayed");
@@ -564,13 +564,25 @@ function buildAlphabetBar() {
 }
 
 function showDetail(element) {
-  const room =
-    rooms[
-      Array.from(document.querySelectorAll(".listing-card")).indexOf(element)
-    ];
+  const cardIndex = Array.from(
+    document.querySelectorAll(".listing-card")
+  ).indexOf(element);
+  console.log("🔍 Card index:", cardIndex, "Total filteredRooms:", filteredRoomsCache.length);
+
+  // Lấy room từ filteredRoomsCache - danh sách đang hiển thị trên trang hiện tại
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = filteredRoomsCache.slice(start, start + PAGE_SIZE);
+  const room = pageItems[cardIndex];
 
   // Debug: kiểm tra dữ liệu room
   console.log("Room data:", room);
+
+  // Nếu không tìm thấy room, thoát và enable scroll lại
+  if (!room) {
+    console.error("❌ Không tìm thấy room data cho index:", cardIndex);
+    document.body.style.overflow = "auto";
+    return;
+  }
 
   const detailTitle = document.getElementById("detailTitle");
   const detailPrice = document.getElementById("detailPrice");
@@ -592,6 +604,7 @@ function showDetail(element) {
 
   // Hiển thị ảnh: ưu tiên images array, sau đó img, cuối cùng placeholder
   if (detailImg) {
+    console.log("🖼️ Room images:", room.images, "| Room img:", room.img);
     if (room.images && Array.isArray(room.images) && room.images.length > 0) {
       console.log("Hiển thị ảnh từ images array:", room.images[0]);
       detailImg.src = room.images[0];
@@ -617,7 +630,7 @@ function showDetail(element) {
     // Disable scroll body và scroll to top
     document.body.style.overflow = "hidden";
     window.scrollTo(0, 0);
-    
+
     detailModal.classList.add("active");
     detailModal.style.display = "flex";
   }
