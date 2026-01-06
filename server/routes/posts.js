@@ -29,7 +29,7 @@ router.get("/", async (req, res) => {
   try {
     const posts = await Post.find()
       .select(
-        "title price area location photos vip user district rentalModel createdAt timestamps"
+        "title price area location photos vip user district rentalModel description address createdAt timestamps"
       )
       .sort({ createdAt: -1 });
     const host = req.protocol + "://" + req.get("host");
