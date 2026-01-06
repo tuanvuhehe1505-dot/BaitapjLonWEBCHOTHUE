@@ -883,6 +883,9 @@ async function loadPosts() {
         district: p.district,
         rentalModel: p.rentalModel,
         price: p.price,
+        description: p.description,
+        photos: p.photos,
+        images: p.images,
       });
     });
 
@@ -1365,6 +1368,7 @@ async function submitPost() {
       rentalModel,
       price,
       area,
+      description: desc,
     });
 
     // Append images (selectedFiles filled from dropzone/file input)
@@ -1390,10 +1394,9 @@ async function submitPost() {
 
     if (response.ok) {
       alert("✅ Đăng tin thành công!");
-      console.log("💾 Bài viết lưu:", {
-        district: data.post?.district,
-        rentalModel: data.post?.rentalModel,
-      });
+      console.log("💾 Bài viết lưu:", data.post);
+      console.log("📝 Description saved:", data.post?.description);
+      console.log("🖼️ Images saved:", data.post?.photos || data.post?.images);
 
       // Reset form
       document.getElementById("postTitle").value = "";
