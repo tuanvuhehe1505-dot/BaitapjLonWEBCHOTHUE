@@ -591,6 +591,9 @@ async function register() {
       document.getElementById("regName").value = "";
       document.getElementById("regPhone").value = "";
       document.getElementById("regPass").value = "";
+      if (document.getElementById("regAdminCode")) {
+        document.getElementById("regAdminCode").value = "";
+      }
       alert("Đăng ký thành công! Vui lòng đăng nhập.");
     } else {
       if (errEl) {
