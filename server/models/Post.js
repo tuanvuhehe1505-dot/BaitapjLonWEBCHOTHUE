@@ -8,6 +8,8 @@ const postSchema = new mongoose.Schema(
     district: String,
     rentalModel: String,
     photos: [String],
+    description: String,
+    address: String,
     vip: { type: Boolean, default: false },
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     time: { type: String, default: () => new Date().toLocaleString("vi-VN") },
