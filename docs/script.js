@@ -231,6 +231,7 @@ function openPostModal() {
   const modal = document.getElementById("postModal");
   console.log("📋 Modal element:", modal);
   if (modal) {
+    window.scrollTo(0, 0);
     modal.classList.add("active");
     modal.style.display = "flex";
     console.log("✅ Modal displayed");
@@ -627,6 +628,7 @@ function showDetail(element) {
   }
 
   if (detailModal) {
+    window.scrollTo(0, 0);
     detailModal.classList.add("active");
     detailModal.style.display = "flex";
   }
