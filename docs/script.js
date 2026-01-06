@@ -14,7 +14,7 @@ function updateImageCount() {
 
 // ==================== MODAL HANDLERS ====================
 document.addEventListener("DOMContentLoaded", function () {
-  // Ẩn/hiện header khi cuộn trên mobile
+  // Header luôn cố định, chỉ ẩn/hiện search-section khi cuộn lên/xuống
   let lastScrollY = window.scrollY;
   const searchSection = document.getElementById("searchSection");
   function handleScroll() {

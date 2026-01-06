@@ -82,17 +82,13 @@ textarea {
 /* ==================== HEADER ==================== */
 .main-header {
   background: linear-gradient(135deg, var(--primary-color) 0%, #0d1ba8 100%);
-  box-shadow: 0 4px 16px rgba(19, 34, 198, 0.1);
+  box-shadow: 0 4px 16px rgba(19, 34, 198, 0.10);
   position: sticky;
   top: 0;
-  z-index: 2000;
+  z-index: 1000;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(6px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.main-header.hide-on-scroll {
-  transform: none !important;
 }
 }
 
@@ -409,6 +405,20 @@ textarea {
   .search-section {
     position: sticky;
     top: 0;
+  }
+}
+}
+
+.search-section.sticky-hide {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .search-section.hide-on-scroll {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
   }
 }
 
@@ -991,7 +1001,6 @@ textarea {
 
 .modal-large {
   max-width: 520px;
-  /* Updated */
 }
 
 .modal-large-detail {
