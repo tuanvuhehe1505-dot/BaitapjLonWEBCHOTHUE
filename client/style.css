@@ -1156,9 +1156,10 @@ textarea {
 .detail-image-slider .detail-image {
   width: 100%;
   height: 400px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 16px 16px 0 0;
   display: block;
+  background: #f0f0f0;
 }
 
 .slider-btn {
