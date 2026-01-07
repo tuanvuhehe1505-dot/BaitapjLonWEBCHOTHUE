@@ -182,10 +182,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+// Helper: đảm bảo modal được append trực tiếp vào body (tránh vấn đề với transform của parent)
+function ensureModalInBody(modal) {
+  if (modal && modal.parentElement !== document.body) {
+    document.body.appendChild(modal);
+  }
+}
+
 function openAuthModal() {
   const tab = arguments.length && arguments[0] ? arguments[0] : "login";
   const modal = document.getElementById("authModal");
   if (modal) {
+    ensureModalInBody(modal);
     // Force inline styles để đảm bảo modal hiển thị giữa màn hình
     modal.style.cssText =
       "display:flex !important; position:fixed !important; top:0 !important; left:0 !important; right:0 !important; bottom:0 !important; width:100vw !important; height:100vh !important; z-index:99999 !important; justify-content:center !important; align-items:center !important; background:rgba(0,0,0,0.7) !important;";
@@ -233,6 +241,7 @@ function openPostModal() {
   const modal = document.getElementById("postModal");
   console.log("📋 Modal element:", modal);
   if (modal) {
+    ensureModalInBody(modal);
     // Force inline styles để đảm bảo modal hiển thị giữa màn hình
     modal.style.cssText =
       "display:flex !important; position:fixed !important; top:0 !important; left:0 !important; right:0 !important; bottom:0 !important; width:100vw !important; height:100vh !important; z-index:99999 !important; justify-content:center !important; align-items:center !important; background:rgba(0,0,0,0.7) !important;";
@@ -630,6 +639,7 @@ function showDetail(element) {
   }
 
   if (detailModal) {
+    ensureModalInBody(detailModal);
     // Force inline styles để đảm bảo modal hiển thị giữa màn hình
     detailModal.style.cssText =
       "display:flex !important; position:fixed !important; top:0 !important; left:0 !important; right:0 !important; bottom:0 !important; width:100vw !important; height:100vh !important; z-index:99999 !important; justify-content:center !important; align-items:center !important; background:rgba(0,0,0,0.7) !important;";
