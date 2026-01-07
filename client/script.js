@@ -486,6 +486,31 @@ function filterByModel(model) {
   applyFilters(1);
 }
 
+// Filter by rental model from category cards (case-insensitive)
+function filterByRentalModel(modelName) {
+  console.log("🔍 Filtering by rental model:", modelName);
+  const modelLower = modelName.toLowerCase();
+  
+  // Filter rooms based on rentalModel field
+  const filtered = rooms.filter((r) => {
+    const roomModel = (r.rentalModel || "").toLowerCase();
+    return roomModel.includes(modelLower) || modelLower.includes(roomModel);
+  });
+  
+  console.log("✅ Found", filtered.length, "rooms with model:", modelName);
+  
+  // Update filteredRoomsCache and render
+  filteredRoomsCache = filtered;
+  currentPage = 1;
+  renderPage();
+  
+  // Scroll to listings section
+  const listingsSection = document.querySelector(".listings-section");
+  if (listingsSection) {
+    listingsSection.scrollIntoView({ behavior: "smooth" });
+  }
+}
+
 // Dropdown lọc mô hình ở header
 document.querySelectorAll(".model-dropdown .dropdown-item").forEach((item) => {
   item.addEventListener("click", function () {
@@ -1035,43 +1060,26 @@ document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener("scroll", handleStickyHeader);
 
   // Category click filter logic
+  // Nhà Nguyên Căn -> filter "Nhà đất cho thuê"
   document
     .getElementById("cat-nhanguyencan")
     ?.addEventListener("click", function (e) {
       e.preventDefault();
-      filterByModel("Nhà Đất cho thuê");
+      filterByRentalModel("Nhà đất cho thuê");
     });
+  // Chung Cư - Căn Hộ -> filter "Nhà đất cho thuê" (cùng với nhà nguyên căn)
   document
     .getElementById("cat-chungcu")
     ?.addEventListener("click", function (e) {
       e.preventDefault();
-      // Lọc các tin có modelType chứa "chung cư" hoặc "căn hộ"
-      const filtered = allPostsRaw.filter((post) => {
-        const m = (
-          post.modelType ||
-          post.model ||
-          post["mô hình"] ||
-          ""
-        ).toLowerCase();
-        return m.includes("chung cư") || m.includes("căn hộ");
-      });
-      renderPosts(filtered);
+      filterByRentalModel("Nhà đất cho thuê");
     });
+  // Mặt Bằng Kinh Doanh -> filter "Mặt bằng cho thuê"
   document
     .getElementById("cat-matbang")
     ?.addEventListener("click", function (e) {
       e.preventDefault();
-      // Lọc các tin có modelType là "mặt bằng cho thuê" hoặc "sang nhượng mặt bằng"
-      const filtered = allPostsRaw.filter((post) => {
-        const m = (
-          post.modelType ||
-          post.model ||
-          post["mô hình"] ||
-          ""
-        ).toLowerCase();
-        return m === "mặt bằng cho thuê" || m === "sang nhượng mặt bằng";
-      });
-      renderPosts(filtered);
+      filterByRentalModel("Mặt bằng cho thuê");
     });
 });
 
