@@ -186,6 +186,9 @@ function openAuthModal() {
   const tab = arguments.length && arguments[0] ? arguments[0] : "login";
   const modal = document.getElementById("authModal");
   if (modal) {
+    // Force inline styles để đảm bảo modal hiển thị giữa màn hình
+    modal.style.cssText =
+      "display:flex !important; position:fixed !important; top:0 !important; left:0 !important; right:0 !important; bottom:0 !important; width:100vw !important; height:100vh !important; z-index:99999 !important; justify-content:center !important; align-items:center !important; background:rgba(0,0,0,0.7) !important;";
     modal.classList.add("active");
     // activate requested tab
     const tabBtn = modal.querySelector(`.modal-tab[data-tab="${tab}"]`);
@@ -197,6 +200,7 @@ function closeAuthModal() {
   const modal = document.getElementById("authModal");
   if (modal) {
     modal.classList.remove("active");
+    modal.style.cssText = ""; // Reset inline styles
   }
 }
 
@@ -204,6 +208,7 @@ function closeDetailModal() {
   const modal = document.getElementById("detailModal");
   if (modal) {
     modal.classList.remove("active");
+    modal.style.cssText = ""; // Reset inline styles
   }
 }
 
@@ -228,6 +233,9 @@ function openPostModal() {
   const modal = document.getElementById("postModal");
   console.log("📋 Modal element:", modal);
   if (modal) {
+    // Force inline styles để đảm bảo modal hiển thị giữa màn hình
+    modal.style.cssText =
+      "display:flex !important; position:fixed !important; top:0 !important; left:0 !important; right:0 !important; bottom:0 !important; width:100vw !important; height:100vh !important; z-index:99999 !important; justify-content:center !important; align-items:center !important; background:rgba(0,0,0,0.7) !important;";
     modal.classList.add("active");
     console.log("✅ Modal displayed");
   } else {
@@ -239,6 +247,7 @@ function closePostModal() {
   const modal = document.getElementById("postModal");
   if (modal) {
     modal.classList.remove("active");
+    modal.style.cssText = ""; // Reset inline styles
   }
 }
 
@@ -621,6 +630,9 @@ function showDetail(element) {
   }
 
   if (detailModal) {
+    // Force inline styles để đảm bảo modal hiển thị giữa màn hình
+    detailModal.style.cssText =
+      "display:flex !important; position:fixed !important; top:0 !important; left:0 !important; right:0 !important; bottom:0 !important; width:100vw !important; height:100vh !important; z-index:99999 !important; justify-content:center !important; align-items:center !important; background:rgba(0,0,0,0.7) !important;";
     detailModal.classList.add("active");
   }
 }
