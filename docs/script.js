@@ -1442,8 +1442,9 @@ async function submitPost() {
       const preview = document.getElementById("imagePreview");
       if (preview) preview.innerHTML = "";
 
-      // Đóng modal
-      document.getElementById("postModal").style.display = "none";
+      // Đóng modal - dùng class thay vì style.display
+      const postModal = document.getElementById("postModal");
+      if (postModal) postModal.classList.remove("active");
 
       // Reload danh sách tin
       await loadPosts();
