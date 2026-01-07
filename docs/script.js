@@ -424,7 +424,7 @@ document.querySelectorAll(".model-dropdown .dropdown-item").forEach((item) => {
   });
 });
 
-function filterByModel(model) {
+function filterPostsByModel(model) {
   // allPostsRaw là mảng chứa toàn bộ tin đăng đã fetch từ backend
   let filtered = [];
   if (model) {
@@ -519,7 +519,7 @@ function renderPaginationControls(totalItems, totalPages) {
       const p = Number(b.getAttribute("data-page"));
       currentPage = p;
       renderPage();
-      window.scrollTo({ top: 200, behavior: "smooth" });
+      // Không scroll - giữ nguyên vị trí người dùng đang đọc
     };
   });
 }
