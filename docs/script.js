@@ -218,6 +218,58 @@ function closeDetailModal() {
     modal.classList.remove("active");
     modal.style.cssText = ""; // Reset inline styles
   }
+  // Reset slider state
+  currentDetailImages = [];
+  currentImageIndex = 0;
+}
+
+// ==================== IMAGE SLIDER ====================
+let currentDetailImages = [];
+let currentImageIndex = 0;
+
+function changeDetailImage(direction) {
+  if (currentDetailImages.length <= 1) return;
+
+  currentImageIndex += direction;
+
+  // Loop around
+  if (currentImageIndex < 0) {
+    currentImageIndex = currentDetailImages.length - 1;
+  } else if (currentImageIndex >= currentDetailImages.length) {
+    currentImageIndex = 0;
+  }
+
+  // Update image
+  const detailImg = document.getElementById("detailImg");
+  if (detailImg) {
+    detailImg.src = currentDetailImages[currentImageIndex];
+  }
+
+  // Update counter
+  const currentIndexEl = document.getElementById("currentImageIndex");
+  if (currentIndexEl) {
+    currentIndexEl.textContent = currentImageIndex + 1;
+  }
+}
+
+function updateSliderUI(images) {
+  currentDetailImages = images || [];
+  currentImageIndex = 0;
+
+  const totalEl = document.getElementById("totalImages");
+  const currentEl = document.getElementById("currentImageIndex");
+  const prevBtn = document.querySelector(".slider-prev");
+  const nextBtn = document.querySelector(".slider-next");
+  const counter = document.querySelector(".slider-counter");
+
+  if (totalEl) totalEl.textContent = currentDetailImages.length || 1;
+  if (currentEl) currentEl.textContent = 1;
+
+  // Hide/show buttons based on image count
+  const hasMultiple = currentDetailImages.length > 1;
+  if (prevBtn) prevBtn.style.display = hasMultiple ? "flex" : "none";
+  if (nextBtn) nextBtn.style.display = hasMultiple ? "flex" : "none";
+  if (counter) counter.style.display = hasMultiple ? "block" : "none";
 }
 
 function callPhone() {
@@ -617,17 +669,23 @@ function showDetail(element) {
   // Hiển thị ảnh: ưu tiên images array, sau đó img, cuối cùng placeholder
   if (detailImg) {
     console.log("🖼️ Room images:", room.images, "| Room img:", room.img);
+
+    let allImages = [];
     if (room.images && Array.isArray(room.images) && room.images.length > 0) {
-      console.log("Hiển thị ảnh từ images array:", room.images[0]);
-      detailImg.src = room.images[0];
+      allImages = room.images;
     } else if (room.img) {
-      console.log("Hiển thị ảnh từ img:", room.img);
-      detailImg.src = room.img;
+      allImages = [room.img];
     } else {
-      console.log("Không có ảnh, dùng placeholder");
-      detailImg.src =
-        "https://via.placeholder.com/700x400?text=Kh%C3%B4ng+c%C3%B3+h%C3%ACnh+%E1%BA%A3nh";
+      allImages = [
+        "https://via.placeholder.com/700x400?text=Kh%C3%B4ng+c%C3%B3+h%C3%ACnh+%E1%BA%A3nh",
+      ];
     }
+
+    console.log("📸 All images for slider:", allImages);
+    detailImg.src = allImages[0];
+
+    // Update slider UI
+    updateSliderUI(allImages);
   }
 
   // Hiển thị mô tả

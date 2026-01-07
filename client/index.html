@@ -491,7 +491,19 @@
         <button class="modal-close" onclick="closeDetailModal()">
           <i class="fas fa-times"></i>
         </button>
-        <img id="detailImg" src="" alt="Detail image" class="detail-image" />
+        <!-- Image Slider -->
+        <div class="detail-image-slider">
+          <button class="slider-btn slider-prev" onclick="changeDetailImage(-1)">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <img id="detailImg" src="" alt="Detail image" class="detail-image" />
+          <button class="slider-btn slider-next" onclick="changeDetailImage(1)">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+          <div class="slider-counter">
+            <span id="currentImageIndex">1</span> / <span id="totalImages">1</span>
+          </div>
+        </div>
         <div class="detail-content">
           <h1 id="detailTitle">Tiêu đề</h1>
           <div class="detail-price">
