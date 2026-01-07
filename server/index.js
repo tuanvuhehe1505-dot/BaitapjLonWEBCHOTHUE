@@ -15,6 +15,21 @@ app.use(express.json());
 // ===== DEBUG (có thể xóa sau khi ổn định) =====
 console.log("JWT_SECRET:", process.env.JWT_SECRET);
 console.log("PORT:", process.env.PORT);
+
+// Check Cloudinary config
+const hasCloudinary = !!(
+  process.env.CLOUDINARY_CLOUD_NAME &&
+  process.env.CLOUDINARY_API_KEY &&
+  process.env.CLOUDINARY_API_SECRET
+);
+console.log(
+  hasCloudinary
+    ? "✅ Cloudinary đã được cấu hình - ảnh sẽ lưu vĩnh viễn"
+    : "⚠️ Cloudinary chưa cấu hình - ảnh sẽ bị mất khi restart"
+);
+if (hasCloudinary) {
+  console.log("   CLOUDINARY_CLOUD_NAME:", process.env.CLOUDINARY_CLOUD_NAME);
+}
 // =============================================
 
 // ===== KẾT NỐI MONGODB =====
