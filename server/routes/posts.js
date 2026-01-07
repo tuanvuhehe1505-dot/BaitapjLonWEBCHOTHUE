@@ -7,12 +7,33 @@ const fs = require("fs");
 // ✅ IMPORT MIDDLEWARE XÁC THỰC
 const authenticateToken = require("../middleware/auth");
 
-// Setup uploads folder
+// ======================= CLOUDINARY SETUP =======================
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const multer = require("multer");
+
+// Cấu hình Cloudinary từ environment variables
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Cloudinary storage cho multer
+const cloudinaryStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "chothuenha", // Folder trên Cloudinary
+    allowed_formats: ["jpg", "jpeg", "png", "gif", "webp"],
+    transformation: [{ width: 1200, height: 900, crop: "limit" }], // Resize ảnh
+  },
+});
+
+// Fallback: Local storage nếu không có Cloudinary config
 const uploadDir = path.join(__dirname, "..", "uploads");
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 
-const multer = require("multer");
-const storage = multer.diskStorage({
+const localStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, uploadDir);
   },
@@ -22,7 +43,22 @@ const storage = multer.diskStorage({
     cb(null, safeName);
   },
 });
+
+// Sử dụng Cloudinary nếu có config, không thì dùng local
+const useCloudinary = !!(
+  process.env.CLOUDINARY_CLOUD_NAME &&
+  process.env.CLOUDINARY_API_KEY &&
+  process.env.CLOUDINARY_API_SECRET
+);
+
+const storage = useCloudinary ? cloudinaryStorage : localStorage;
 const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
+
+console.log(
+  useCloudinary
+    ? "✅ Cloudinary storage enabled - ảnh sẽ được lưu vĩnh viễn trên cloud"
+    : "⚠️ Using local storage - ảnh có thể bị mất khi server restart"
+);
 
 // GET posts (expose full URLs for photos)
 router.get("/", async (req, res) => {
@@ -86,14 +122,23 @@ router.post(
         return res.status(400).json({ message: "Thiếu thông tin bắt buộc" });
       }
 
-      // Save filenames (store only filenames in DB)
+      // Lấy URL ảnh từ Cloudinary hoặc filename từ local storage
       const files = req.files || [];
-      const filenames = files.map((f) => f.filename);
+      let photoUrls = [];
+
+      if (useCloudinary) {
+        // Cloudinary trả về full URL trong file.path
+        photoUrls = files.map((f) => f.path);
+        console.log("📸 Cloudinary URLs:", photoUrls);
+      } else {
+        // Local storage - chỉ lưu filename
+        photoUrls = files.map((f) => f.filename);
+      }
 
       // If no uploaded files but client provided an image URL fallback, accept it
-      if ((!filenames || filenames.length === 0) && req.body.image) {
+      if ((!photoUrls || photoUrls.length === 0) && req.body.image) {
         // allow direct URL in photos array
-        filenames.push(req.body.image);
+        photoUrls.push(req.body.image);
       }
 
       const newPost = new Post({
@@ -104,15 +149,18 @@ router.post(
         price,
         area,
         description,
-        photos: filenames,
+        photos: photoUrls,
         user: req.user.id,
         createdAt: new Date(),
       });
 
       await newPost.save();
 
+      console.log("✅ Post saved with photos:", photoUrls);
+
       res.json({ message: "✅ Đăng tin thành công!", post: newPost });
     } catch (error) {
+      console.error("❌ Error creating post:", error);
       res.status(500).json({ message: "Lỗi server: " + error.message });
     }
   }
