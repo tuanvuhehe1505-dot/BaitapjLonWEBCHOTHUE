@@ -490,20 +490,20 @@ function filterByModel(model) {
 function filterByRentalModel(modelName) {
   console.log("🔍 Filtering by rental model:", modelName);
   const modelLower = modelName.toLowerCase();
-  
+
   // Filter rooms based on rentalModel field
   const filtered = rooms.filter((r) => {
     const roomModel = (r.rentalModel || "").toLowerCase();
     return roomModel.includes(modelLower) || modelLower.includes(roomModel);
   });
-  
+
   console.log("✅ Found", filtered.length, "rooms with model:", modelName);
-  
+
   // Update filteredRoomsCache and render
   filteredRoomsCache = filtered;
   currentPage = 1;
   renderPage();
-  
+
   // Scroll to listings section
   const listingsSection = document.querySelector(".listings-section");
   if (listingsSection) {
